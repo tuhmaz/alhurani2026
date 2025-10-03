@@ -1,0 +1,52 @@
+@import "../../scss/_bootstrap-extended/include";
+@import "toastr/build/toastr.min";
+
+// Theme alignment for Toastr using Bootstrap variables
+// Ref: https://github.com/CodeSeven/toastr
+
+.toast {
+  font-family: $font-family-base;
+  @include border-radius($border-radius);
+  box-shadow: $box-shadow;
+
+  .toast-title {
+    font-weight: $font-weight-semibold;
+    margin-block-end: .25rem;
+  }
+  .toast-message {
+    margin: 0;
+    line-height: $line-height-base;
+  }
+}
+
+// Color variants mapped to theme colors
+.toast-success {
+  background-color: var(--#{$prefix}success) !important;
+  color: color-contrast(map-get($theme-colors, success)) !important;
+  box-shadow: 0 .25rem 1rem rgba(var(--#{$prefix}success-rgb), .35) !important;
+}
+.toast-info {
+  background-color: var(--#{$prefix}info) !important;
+  color: color-contrast(map-get($theme-colors, info)) !important;
+  box-shadow: 0 .25rem 1rem rgba(var(--#{$prefix}info-rgb), .35) !important;
+}
+.toast-warning {
+  background-color: var(--#{$prefix}warning) !important;
+  color: color-contrast(map-get($theme-colors, warning)) !important;
+  box-shadow: 0 .25rem 1rem rgba(var(--#{$prefix}warning-rgb), .35) !important;
+}
+.toast-error {
+  background-color: var(--#{$prefix}danger) !important;
+  color: color-contrast(map-get($theme-colors, danger)) !important;
+  box-shadow: 0 .25rem 1rem rgba(var(--#{$prefix}danger-rgb), .35) !important;
+}
+
+// Progress bar color alignment
+#toast-container > .toast > .toast-progress {
+  background-color: rgba(var(--#{$prefix}black-rgb), .15);
+}
+
+// Placement fixes with z-index above modals tooltips if needed
+#toast-container {
+  z-index: $zindex-toast !important;
+}

@@ -1,0 +1,103 @@
+/* Summernote (Lite) integration and theming */
+
+/* ********************************************************************************
+  We import Bootstrap variables/mixins to align Summernote visuals with the theme
+******************************************************************************** */
+@import "../../scss/_bootstrap-extended/include";
+
+/* Import Summernote Bootstrap 5 SCSS from node_modules */
+@import "summernote/src/styles/bs5/summernote-bs5.scss";
+
+/* Base adjustments to better match Bootstrap 5 spacing, radii and colors */
+.note-editor {
+  border: 1px solid $input-border-color;
+  @include border-radius($border-radius);
+  background-color: $card-bg;
+
+  .note-toolbar {
+    padding: .5rem;
+    border-bottom: 1px solid $border-color;
+    background-color: $card-cap-bg;
+
+    .note-btn {
+      @include border-radius($btn-border-radius);
+      padding: .375rem .5rem;
+      color: $body-color;
+
+      &:hover {
+        color: $body-color;
+        background-color: rgba($primary, .08);
+        border-color: transparent;
+      }
+
+      &.active,
+      &.focus,
+      &:focus {
+        color: color-contrast($primary);
+        background-color: $primary;
+        border-color: $primary;
+        box-shadow: none;
+      }
+    }
+
+    .dropdown-menu {
+      @include border-radius($dropdown-border-radius);
+    }
+  }
+
+  .note-statusbar {
+    border-top: 1px solid $border-color;
+    background-color: $card-bg;
+  }
+
+  .note-editing-area {
+    .note-editable {
+      min-block-size: 12rem;
+      padding: 1rem;
+      color: $body-color;
+      background-color: $body-bg;
+
+      a {
+        color: $primary;
+        text-decoration: underline;
+      }
+
+      h1, h2, h3, h4, h5, h6 {
+        color: $headings-color;
+      }
+    }
+  }
+}
+
+/* Dark mode improvements */
+@if $enable-dark-mode {
+  @include color-mode(dark) {
+    .note-editor {
+      border-color: $border-color;
+      background-color: $card-bg;
+
+      .note-toolbar {
+        background-color: $card-cap-bg;
+        border-color: $border-color;
+
+        .note-btn {
+          color: $body-color;
+
+          &:hover {
+            background-color: rgba($primary, .12);
+          }
+        }
+      }
+
+      .note-statusbar {
+        border-color: $border-color;
+        background-color: $card-bg;
+      }
+
+      .note-editing-area .note-editable {
+        background-color: $body-bg;
+        color: $body-color;
+      }
+    }
+  }
+}
