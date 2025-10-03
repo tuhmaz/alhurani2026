@@ -55,7 +55,6 @@ export default defineConfig({
     laravel({
       input: [
         'resources/css/app.css',
-        'resources/assets/css/demo.css',
         'resources/js/app.js',
         'resources/assets/js/pages/security/blocked-ips.js',
         'resources/assets/js/pages/security/trusted-ips.js',

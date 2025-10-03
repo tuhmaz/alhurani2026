@@ -9,6 +9,7 @@ use App\Http\Middleware\UpdateUserLastActivity;
 use App\Http\Middleware\LogLastActivity;
 use App\Http\Middleware\CompressResponse;
 use App\Http\Middleware\RequestMonitorMiddleware;
+use App\Http\Middleware\CachePublicResponse;
 use App\Http\Middleware\SecurityScanMiddleware;
 use App\Http\Middleware\StripContentEncodingHeader;
 use App\Http\Middleware\SecurityHeaders;
@@ -27,6 +28,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->web([
             LocaleMiddleware::class,
             CompressResponse::class,
+            CachePublicResponse::class,
             VisitorTrackingMiddleware::class,
             UpdateUserLastActivity::class,
             LogLastActivity::class,
