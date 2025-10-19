@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 
 class CommentController extends Controller
 {
@@ -48,6 +49,19 @@ class CommentController extends Controller
       ]);
 
       $comment->save();
+
+      if ($request->commentable_type === Article::class) {
+        $articleCacheKey = sprintf('article_full_%s_%d', $database, $contentModel->id);
+        $articleRenderedKey = sprintf(
+          'article_rendered_%s_%d_%d',
+          $database,
+          $contentModel->id,
+          $contentModel->updated_at?->getTimestamp() ?? 0
+        );
+
+        Cache::forget($articleCacheKey);
+        Cache::forget($articleRenderedKey);
+      }
 
       // بناء رابط مباشر للتعليق باستخدام المسارات الاسمية للمقال/الخبر
       try {
@@ -128,8 +142,13 @@ class CommentController extends Controller
         'comment' => $comment->toArray()
       ]);
 
-      // التحقق من أن المستخدم هو صاحب التعليق
-      if (Auth::id() !== $comment->user_id) {
+      $user = Auth::user();
+      $canDelete = $user && (
+        $user->id === $comment->user_id ||
+        (method_exists($user, 'hasRole') && $user->hasRole('Admin'))
+      );
+
+      if (!$canDelete) {
         return redirect()->back()->with('error', 'غير مصرح لك بحذف هذا التعليق');
       }
 
@@ -143,6 +162,28 @@ class CommentController extends Controller
 
       // حذف التعليق
       $deleted = $comment->delete();
+
+      if ($deleted && $comment->commentable_type === Article::class) {
+        $articleCacheKey = sprintf('article_full_%s_%d', $database, $comment->commentable_id);
+
+        /** @var \App\Models\Article|null $article */
+        $article = Article::on($database)->find($comment->commentable_id);
+
+        $articleRenderedKey = $article
+          ? sprintf(
+            'article_rendered_%s_%d_%d',
+            $database,
+            $article->id,
+            $article->updated_at?->getTimestamp() ?? 0
+          )
+          : null;
+
+        Cache::forget($articleCacheKey);
+
+        if ($articleRenderedKey) {
+          Cache::forget($articleRenderedKey);
+        }
+      }
 
       DB::connection($database)->commit();
 
