@@ -210,10 +210,14 @@ class ArticleController extends Controller
 
           $this->sendNotification($article);
 
-          $users = User::all();
-          foreach ($users as $user) {
-              $user->notify(new ArticleNotification($article));
-          }
+          // إرسال الإشعارات للمستخدمين بشكل فعّال (تجنب N+1 Query)
+          // استخدام chunk لتجنب تحميل جميع المستخدمين في الذاكرة دفعة واحدة
+          User::select('id', 'name', 'email')
+              ->chunk(200, function ($users) use ($article) {
+                  foreach ($users as $user) {
+                      $user->notify(new ArticleNotification($article));
+                  }
+              });
       });
 
 

@@ -1,5 +1,11 @@
 
+// Import Summernote font-face CSS (protected from PurgeCSS)
+import './summernote-fonts.css';
 
+// Import Summernote CSS (required for icons to display properly)
+import 'summernote/dist/summernote-bs5.css';
+
+// Import Summernote JavaScript
 import 'summernote/dist/summernote-bs5.js';
 
 // Module-scope references and helpers

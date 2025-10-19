@@ -7,23 +7,23 @@
     "file": "assets/_commonjsHelpers-D6-XlEtG.js",
     "name": "_commonjsHelpers"
   },
-  "__template-customizer-C0mD0SaO.js": {
-    "file": "assets/_template-customizer-C0mD0SaO.js",
+  "__template-customizer-C5g6LEHl.css": {
+    "file": "assets/_template-customizer-C5g6LEHl.css",
+    "src": "__template-customizer-C5g6LEHl.css"
+  },
+  "__template-customizer-CMirTUiP.js": {
+    "file": "assets/_template-customizer-CMirTUiP.js",
     "name": "_template-customizer",
     "css": [
-      "assets/_template-customizer-Dlk0cFN9.css"
+      "assets/_template-customizer-C5g6LEHl.css"
     ]
   },
-  "__template-customizer-Dlk0cFN9.css": {
-    "file": "assets/_template-customizer-Dlk0cFN9.css",
-    "src": "__template-customizer-Dlk0cFN9.css"
-  },
-  "_index-BJ3qHF3B.js": {
-    "file": "assets/index-BJ3qHF3B.js",
+  "_index-CGYv73xd.js": {
+    "file": "assets/index-CGYv73xd.js",
     "name": "index"
   },
-  "_index-CRnahbGi.js": {
-    "file": "assets/index-CRnahbGi.js",
+  "_index-eQWVPmsa.js": {
+    "file": "assets/index-eQWVPmsa.js",
     "name": "index"
   },
   "_index-xsH4HHeE.js": {
@@ -89,246 +89,6 @@
   "node_modules/jstree/dist/themes/default/throbber.gif": {
     "file": "assets/throbber-DhAvNIJO.gif",
     "src": "node_modules/jstree/dist/themes/default/throbber.gif"
-  },
-  "node_modules/katex/dist/fonts/KaTeX_AMS-Regular.ttf": {
-    "file": "assets/KaTeX_AMS-Regular-DRggAlZN.ttf",
-    "src": "node_modules/katex/dist/fonts/KaTeX_AMS-Regular.ttf"
-  },
-  "node_modules/katex/dist/fonts/KaTeX_AMS-Regular.woff": {
-    "file": "assets/KaTeX_AMS-Regular-DMm9YOAa.woff",
-    "src": "node_modules/katex/dist/fonts/KaTeX_AMS-Regular.woff"
-  },
-  "node_modules/katex/dist/fonts/KaTeX_AMS-Regular.woff2": {
-    "file": "assets/KaTeX_AMS-Regular-BQhdFMY1.woff2",
-    "src": "node_modules/katex/dist/fonts/KaTeX_AMS-Regular.woff2"
-  },
-  "node_modules/katex/dist/fonts/KaTeX_Caligraphic-Bold.ttf": {
-    "file": "assets/KaTeX_Caligraphic-Bold-ATXxdsX0.ttf",
-    "src": "node_modules/katex/dist/fonts/KaTeX_Caligraphic-Bold.ttf"
-  },
-  "node_modules/katex/dist/fonts/KaTeX_Caligraphic-Bold.woff": {
-    "file": "assets/KaTeX_Caligraphic-Bold-BEiXGLvX.woff",
-    "src": "node_modules/katex/dist/fonts/KaTeX_Caligraphic-Bold.woff"
-  },
-  "node_modules/katex/dist/fonts/KaTeX_Caligraphic-Bold.woff2": {
-    "file": "assets/KaTeX_Caligraphic-Bold-Dq_IR9rO.woff2",
-    "src": "node_modules/katex/dist/fonts/KaTeX_Caligraphic-Bold.woff2"
-  },
-  "node_modules/katex/dist/fonts/KaTeX_Caligraphic-Regular.ttf": {
-    "file": "assets/KaTeX_Caligraphic-Regular-wX97UBjC.ttf",
-    "src": "node_modules/katex/dist/fonts/KaTeX_Caligraphic-Regular.ttf"
-  },
-  "node_modules/katex/dist/fonts/KaTeX_Caligraphic-Regular.woff": {
-    "file": "assets/KaTeX_Caligraphic-Regular-CTRA-rTL.woff",
-    "src": "node_modules/katex/dist/fonts/KaTeX_Caligraphic-Regular.woff"
-  },
-  "node_modules/katex/dist/fonts/KaTeX_Caligraphic-Regular.woff2": {
-    "file": "assets/KaTeX_Caligraphic-Regular-Di6jR-x-.woff2",
-    "src": "node_modules/katex/dist/fonts/KaTeX_Caligraphic-Regular.woff2"
-  },
-  "node_modules/katex/dist/fonts/KaTeX_Fraktur-Bold.ttf": {
-    "file": "assets/KaTeX_Fraktur-Bold-BdnERNNW.ttf",
-    "src": "node_modules/katex/dist/fonts/KaTeX_Fraktur-Bold.ttf"
-  },
-  "node_modules/katex/dist/fonts/KaTeX_Fraktur-Bold.woff": {
-    "file": "assets/KaTeX_Fraktur-Bold-BsDP51OF.woff",
-    "src": "node_modules/katex/dist/fonts/KaTeX_Fraktur-Bold.woff"
-  },
-  "node_modules/katex/dist/fonts/KaTeX_Fraktur-Bold.woff2": {
-    "file": "assets/KaTeX_Fraktur-Bold-CL6g_b3V.woff2",
-    "src": "node_modules/katex/dist/fonts/KaTeX_Fraktur-Bold.woff2"
-  },
-  "node_modules/katex/dist/fonts/KaTeX_Fraktur-Regular.ttf": {
-    "file": "assets/KaTeX_Fraktur-Regular-CB_wures.ttf",
-    "src": "node_modules/katex/dist/fonts/KaTeX_Fraktur-Regular.ttf"
-  },
-  "node_modules/katex/dist/fonts/KaTeX_Fraktur-Regular.woff": {
-    "file": "assets/KaTeX_Fraktur-Regular-Dxdc4cR9.woff",
-    "src": "node_modules/katex/dist/fonts/KaTeX_Fraktur-Regular.woff"
-  },
-  "node_modules/katex/dist/fonts/KaTeX_Fraktur-Regular.woff2": {
-    "file": "assets/KaTeX_Fraktur-Regular-CTYiF6lA.woff2",
-    "src": "node_modules/katex/dist/fonts/KaTeX_Fraktur-Regular.woff2"
-  },
-  "node_modules/katex/dist/fonts/KaTeX_Main-Bold.ttf": {
-    "file": "assets/KaTeX_Main-Bold-waoOVXN0.ttf",
-    "src": "node_modules/katex/dist/fonts/KaTeX_Main-Bold.ttf"
-  },
-  "node_modules/katex/dist/fonts/KaTeX_Main-Bold.woff": {
-    "file": "assets/KaTeX_Main-Bold-Jm3AIy58.woff",
-    "src": "node_modules/katex/dist/fonts/KaTeX_Main-Bold.woff"
-  },
-  "node_modules/katex/dist/fonts/KaTeX_Main-Bold.woff2": {
-    "file": "assets/KaTeX_Main-Bold-Cx986IdX.woff2",
-    "src": "node_modules/katex/dist/fonts/KaTeX_Main-Bold.woff2"
-  },
-  "node_modules/katex/dist/fonts/KaTeX_Main-BoldItalic.ttf": {
-    "file": "assets/KaTeX_Main-BoldItalic-DzxPMmG6.ttf",
-    "src": "node_modules/katex/dist/fonts/KaTeX_Main-BoldItalic.ttf"
-  },
-  "node_modules/katex/dist/fonts/KaTeX_Main-BoldItalic.woff": {
-    "file": "assets/KaTeX_Main-BoldItalic-SpSLRI95.woff",
-    "src": "node_modules/katex/dist/fonts/KaTeX_Main-BoldItalic.woff"
-  },
-  "node_modules/katex/dist/fonts/KaTeX_Main-BoldItalic.woff2": {
-    "file": "assets/KaTeX_Main-BoldItalic-DxDJ3AOS.woff2",
-    "src": "node_modules/katex/dist/fonts/KaTeX_Main-BoldItalic.woff2"
-  },
-  "node_modules/katex/dist/fonts/KaTeX_Main-Italic.ttf": {
-    "file": "assets/KaTeX_Main-Italic-3WenGoN9.ttf",
-    "src": "node_modules/katex/dist/fonts/KaTeX_Main-Italic.ttf"
-  },
-  "node_modules/katex/dist/fonts/KaTeX_Main-Italic.woff": {
-    "file": "assets/KaTeX_Main-Italic-BMLOBm91.woff",
-    "src": "node_modules/katex/dist/fonts/KaTeX_Main-Italic.woff"
-  },
-  "node_modules/katex/dist/fonts/KaTeX_Main-Italic.woff2": {
-    "file": "assets/KaTeX_Main-Italic-NWA7e6Wa.woff2",
-    "src": "node_modules/katex/dist/fonts/KaTeX_Main-Italic.woff2"
-  },
-  "node_modules/katex/dist/fonts/KaTeX_Main-Regular.ttf": {
-    "file": "assets/KaTeX_Main-Regular-ypZvNtVU.ttf",
-    "src": "node_modules/katex/dist/fonts/KaTeX_Main-Regular.ttf"
-  },
-  "node_modules/katex/dist/fonts/KaTeX_Main-Regular.woff": {
-    "file": "assets/KaTeX_Main-Regular-Dr94JaBh.woff",
-    "src": "node_modules/katex/dist/fonts/KaTeX_Main-Regular.woff"
-  },
-  "node_modules/katex/dist/fonts/KaTeX_Main-Regular.woff2": {
-    "file": "assets/KaTeX_Main-Regular-B22Nviop.woff2",
-    "src": "node_modules/katex/dist/fonts/KaTeX_Main-Regular.woff2"
-  },
-  "node_modules/katex/dist/fonts/KaTeX_Math-BoldItalic.ttf": {
-    "file": "assets/KaTeX_Math-BoldItalic-B3XSjfu4.ttf",
-    "src": "node_modules/katex/dist/fonts/KaTeX_Math-BoldItalic.ttf"
-  },
-  "node_modules/katex/dist/fonts/KaTeX_Math-BoldItalic.woff": {
-    "file": "assets/KaTeX_Math-BoldItalic-iY-2wyZ7.woff",
-    "src": "node_modules/katex/dist/fonts/KaTeX_Math-BoldItalic.woff"
-  },
-  "node_modules/katex/dist/fonts/KaTeX_Math-BoldItalic.woff2": {
-    "file": "assets/KaTeX_Math-BoldItalic-CZnvNsCZ.woff2",
-    "src": "node_modules/katex/dist/fonts/KaTeX_Math-BoldItalic.woff2"
-  },
-  "node_modules/katex/dist/fonts/KaTeX_Math-Italic.ttf": {
-    "file": "assets/KaTeX_Math-Italic-flOr_0UB.ttf",
-    "src": "node_modules/katex/dist/fonts/KaTeX_Math-Italic.ttf"
-  },
-  "node_modules/katex/dist/fonts/KaTeX_Math-Italic.woff": {
-    "file": "assets/KaTeX_Math-Italic-DA0__PXp.woff",
-    "src": "node_modules/katex/dist/fonts/KaTeX_Math-Italic.woff"
-  },
-  "node_modules/katex/dist/fonts/KaTeX_Math-Italic.woff2": {
-    "file": "assets/KaTeX_Math-Italic-t53AETM-.woff2",
-    "src": "node_modules/katex/dist/fonts/KaTeX_Math-Italic.woff2"
-  },
-  "node_modules/katex/dist/fonts/KaTeX_SansSerif-Bold.ttf": {
-    "file": "assets/KaTeX_SansSerif-Bold-CFMepnvq.ttf",
-    "src": "node_modules/katex/dist/fonts/KaTeX_SansSerif-Bold.ttf"
-  },
-  "node_modules/katex/dist/fonts/KaTeX_SansSerif-Bold.woff": {
-    "file": "assets/KaTeX_SansSerif-Bold-DbIhKOiC.woff",
-    "src": "node_modules/katex/dist/fonts/KaTeX_SansSerif-Bold.woff"
-  },
-  "node_modules/katex/dist/fonts/KaTeX_SansSerif-Bold.woff2": {
-    "file": "assets/KaTeX_SansSerif-Bold-D1sUS0GD.woff2",
-    "src": "node_modules/katex/dist/fonts/KaTeX_SansSerif-Bold.woff2"
-  },
-  "node_modules/katex/dist/fonts/KaTeX_SansSerif-Italic.ttf": {
-    "file": "assets/KaTeX_SansSerif-Italic-YYjJ1zSn.ttf",
-    "src": "node_modules/katex/dist/fonts/KaTeX_SansSerif-Italic.ttf"
-  },
-  "node_modules/katex/dist/fonts/KaTeX_SansSerif-Italic.woff": {
-    "file": "assets/KaTeX_SansSerif-Italic-DN2j7dab.woff",
-    "src": "node_modules/katex/dist/fonts/KaTeX_SansSerif-Italic.woff"
-  },
-  "node_modules/katex/dist/fonts/KaTeX_SansSerif-Italic.woff2": {
-    "file": "assets/KaTeX_SansSerif-Italic-C3H0VqGB.woff2",
-    "src": "node_modules/katex/dist/fonts/KaTeX_SansSerif-Italic.woff2"
-  },
-  "node_modules/katex/dist/fonts/KaTeX_SansSerif-Regular.ttf": {
-    "file": "assets/KaTeX_SansSerif-Regular-BNo7hRIc.ttf",
-    "src": "node_modules/katex/dist/fonts/KaTeX_SansSerif-Regular.ttf"
-  },
-  "node_modules/katex/dist/fonts/KaTeX_SansSerif-Regular.woff": {
-    "file": "assets/KaTeX_SansSerif-Regular-CS6fqUqJ.woff",
-    "src": "node_modules/katex/dist/fonts/KaTeX_SansSerif-Regular.woff"
-  },
-  "node_modules/katex/dist/fonts/KaTeX_SansSerif-Regular.woff2": {
-    "file": "assets/KaTeX_SansSerif-Regular-DDBCnlJ7.woff2",
-    "src": "node_modules/katex/dist/fonts/KaTeX_SansSerif-Regular.woff2"
-  },
-  "node_modules/katex/dist/fonts/KaTeX_Script-Regular.ttf": {
-    "file": "assets/KaTeX_Script-Regular-C5JkGWo-.ttf",
-    "src": "node_modules/katex/dist/fonts/KaTeX_Script-Regular.ttf"
-  },
-  "node_modules/katex/dist/fonts/KaTeX_Script-Regular.woff": {
-    "file": "assets/KaTeX_Script-Regular-D5yQViql.woff",
-    "src": "node_modules/katex/dist/fonts/KaTeX_Script-Regular.woff"
-  },
-  "node_modules/katex/dist/fonts/KaTeX_Script-Regular.woff2": {
-    "file": "assets/KaTeX_Script-Regular-D3wIWfF6.woff2",
-    "src": "node_modules/katex/dist/fonts/KaTeX_Script-Regular.woff2"
-  },
-  "node_modules/katex/dist/fonts/KaTeX_Size1-Regular.ttf": {
-    "file": "assets/KaTeX_Size1-Regular-Dbsnue_I.ttf",
-    "src": "node_modules/katex/dist/fonts/KaTeX_Size1-Regular.ttf"
-  },
-  "node_modules/katex/dist/fonts/KaTeX_Size1-Regular.woff": {
-    "file": "assets/KaTeX_Size1-Regular-C195tn64.woff",
-    "src": "node_modules/katex/dist/fonts/KaTeX_Size1-Regular.woff"
-  },
-  "node_modules/katex/dist/fonts/KaTeX_Size1-Regular.woff2": {
-    "file": "assets/KaTeX_Size1-Regular-mCD8mA8B.woff2",
-    "src": "node_modules/katex/dist/fonts/KaTeX_Size1-Regular.woff2"
-  },
-  "node_modules/katex/dist/fonts/KaTeX_Size2-Regular.ttf": {
-    "file": "assets/KaTeX_Size2-Regular-B7gKUWhC.ttf",
-    "src": "node_modules/katex/dist/fonts/KaTeX_Size2-Regular.ttf"
-  },
-  "node_modules/katex/dist/fonts/KaTeX_Size2-Regular.woff": {
-    "file": "assets/KaTeX_Size2-Regular-oD1tc_U0.woff",
-    "src": "node_modules/katex/dist/fonts/KaTeX_Size2-Regular.woff"
-  },
-  "node_modules/katex/dist/fonts/KaTeX_Size2-Regular.woff2": {
-    "file": "assets/KaTeX_Size2-Regular-Dy4dx90m.woff2",
-    "src": "node_modules/katex/dist/fonts/KaTeX_Size2-Regular.woff2"
-  },
-  "node_modules/katex/dist/fonts/KaTeX_Size3-Regular.ttf": {
-    "file": "assets/KaTeX_Size3-Regular-DgpXs0kz.ttf",
-    "src": "node_modules/katex/dist/fonts/KaTeX_Size3-Regular.ttf"
-  },
-  "node_modules/katex/dist/fonts/KaTeX_Size3-Regular.woff": {
-    "file": "assets/KaTeX_Size3-Regular-CTq5MqoE.woff",
-    "src": "node_modules/katex/dist/fonts/KaTeX_Size3-Regular.woff"
-  },
-  "node_modules/katex/dist/fonts/KaTeX_Size3-Regular.woff2": {
-    "file": "assets/KaTeX_Size3-Regular-gV2CO0n9.woff2",
-    "src": "node_modules/katex/dist/fonts/KaTeX_Size3-Regular.woff2"
-  },
-  "node_modules/katex/dist/fonts/KaTeX_Size4-Regular.ttf": {
-    "file": "assets/KaTeX_Size4-Regular-DWFBv043.ttf",
-    "src": "node_modules/katex/dist/fonts/KaTeX_Size4-Regular.ttf"
-  },
-  "node_modules/katex/dist/fonts/KaTeX_Size4-Regular.woff": {
-    "file": "assets/KaTeX_Size4-Regular-BF-4gkZK.woff",
-    "src": "node_modules/katex/dist/fonts/KaTeX_Size4-Regular.woff"
-  },
-  "node_modules/katex/dist/fonts/KaTeX_Size4-Regular.woff2": {
-    "file": "assets/KaTeX_Size4-Regular-Dl5lxZxV.woff2",
-    "src": "node_modules/katex/dist/fonts/KaTeX_Size4-Regular.woff2"
-  },
-  "node_modules/katex/dist/fonts/KaTeX_Typewriter-Regular.ttf": {
-    "file": "assets/KaTeX_Typewriter-Regular-D3Ib7_Hf.ttf",
-    "src": "node_modules/katex/dist/fonts/KaTeX_Typewriter-Regular.ttf"
-  },
-  "node_modules/katex/dist/fonts/KaTeX_Typewriter-Regular.woff": {
-    "file": "assets/KaTeX_Typewriter-Regular-C0xS9mPB.woff",
-    "src": "node_modules/katex/dist/fonts/KaTeX_Typewriter-Regular.woff"
-  },
-  "node_modules/katex/dist/fonts/KaTeX_Typewriter-Regular.woff2": {
-    "file": "assets/KaTeX_Typewriter-Regular-CO6r4hn1.woff2",
-    "src": "node_modules/katex/dist/fonts/KaTeX_Typewriter-Regular.woff2"
   },
   "node_modules/leaflet/dist/images/layers-2x.png": {
     "file": "assets/layers-2x-Bpkbi35X.png",
@@ -399,12 +159,12 @@
     "src": "node_modules/summernote/src/styles/summernote/font/summernote.woff2"
   },
   "resources/assets/css/alemedu.css": {
-    "file": "assets/alemedu-D3bCeGAR.css",
+    "file": "assets/alemedu-CWGNst18.css",
     "src": "resources/assets/css/alemedu.css",
     "isEntry": true
   },
   "resources/assets/css/alerts.css": {
-    "file": "assets/alerts-Bv0QI8e0.css",
+    "file": "assets/alerts-4tQ0XBeg.css",
     "src": "resources/assets/css/alerts.css",
     "isEntry": true
   },
@@ -414,7 +174,7 @@
     "isEntry": true
   },
   "resources/assets/css/articles/articles-list-style.css": {
-    "file": "assets/articles-list-style-C28qEVh-.css",
+    "file": "assets/articles-list-style-XLJdsA7z.css",
     "src": "resources/assets/css/articles/articles-list-style.css",
     "isEntry": true
   },
@@ -424,17 +184,17 @@
     "isEntry": true
   },
   "resources/assets/css/dashboard.css": {
-    "file": "assets/dashboard-DyUFvu9w.css",
+    "file": "assets/dashboard-NRe4ngua.css",
     "src": "resources/assets/css/dashboard.css",
     "isEntry": true
   },
   "resources/assets/css/demo.css": {
-    "file": "assets/demo-C9zMtG-C.css",
+    "file": "assets/demo-DKWFFUwM.css",
     "src": "resources/assets/css/demo.css",
     "isEntry": true
   },
   "resources/assets/css/pages/about-us.css": {
-    "file": "assets/about-us-B-pV0fKy.css",
+    "file": "assets/about-us-B8lExgbE.css",
     "src": "resources/assets/css/pages/about-us.css",
     "isEntry": true
   },
@@ -449,22 +209,22 @@
     "isEntry": true
   },
   "resources/assets/css/pages/notifications.css": {
-    "file": "assets/notifications-D31tOX8s.css",
+    "file": "assets/notifications-DUBXzU7L.css",
     "src": "resources/assets/css/pages/notifications.css",
     "isEntry": true
   },
   "resources/assets/css/pages/performance.css": {
-    "file": "assets/performance-BkX6gijy.css",
+    "file": "assets/performance-Cl-HJKh0.css",
     "src": "resources/assets/css/pages/performance.css",
     "isEntry": true
   },
   "resources/assets/css/pages/school-classes.css": {
-    "file": "assets/school-classes-DuxR05-Y.css",
+    "file": "assets/school-classes-B4q5waJr.css",
     "src": "resources/assets/css/pages/school-classes.css",
     "isEntry": true
   },
   "resources/assets/css/pages/security.css": {
-    "file": "assets/security-CX6WbMqc.css",
+    "file": "assets/security-BUJ7SxwG.css",
     "src": "resources/assets/css/pages/security.css",
     "isEntry": true
   },
@@ -480,12 +240,12 @@
     "isEntry": true
   },
   "resources/assets/js/app-calendar copy.js": {
-    "file": "assets/app-calendar copy-CHb8bHQ2.js",
+    "file": "assets/app-calendar copy-UOUfIjn7.js",
     "name": "app-calendar copy",
     "src": "resources/assets/js/app-calendar copy.js",
     "isEntry": true,
     "imports": [
-      "_index-BJ3qHF3B.js",
+      "_index-CGYv73xd.js",
       "_sweetalert2.esm.all-D3pEHXw3.js",
       "_moment-zH0z38ay.js"
     ]
@@ -515,7 +275,7 @@
     "isEntry": true
   },
   "resources/assets/js/app-ecommerce-category-list.js": {
-    "file": "assets/app-ecommerce-category-list-C4mjI0Yb.js",
+    "file": "assets/app-ecommerce-category-list-Yw0L3z6t.js",
     "name": "app-ecommerce-category-list",
     "src": "resources/assets/js/app-ecommerce-category-list.js",
     "isEntry": true
@@ -557,7 +317,7 @@
     "isEntry": true
   },
   "resources/assets/js/app-ecommerce-product-add.js": {
-    "file": "assets/app-ecommerce-product-add-TRKYpfSq.js",
+    "file": "assets/app-ecommerce-product-add-DJto81cg.js",
     "name": "app-ecommerce-product-add",
     "src": "resources/assets/js/app-ecommerce-product-add.js",
     "isEntry": true
@@ -586,14 +346,8 @@
     "src": "resources/assets/js/app-ecommerce-settings.js",
     "isEntry": true
   },
-  "resources/assets/js/app-email copy.js": {
-    "file": "assets/app-email copy-D0gatTWJ.js",
-    "name": "app-email copy",
-    "src": "resources/assets/js/app-email copy.js",
-    "isEntry": true
-  },
   "resources/assets/js/app-email.js": {
-    "file": "assets/app-email-DgQj9euV.js",
+    "file": "assets/app-email-Ugl6E6Ys.js",
     "name": "app-email",
     "src": "resources/assets/js/app-email.js",
     "isEntry": true
@@ -623,7 +377,7 @@
     "isEntry": true
   },
   "resources/assets/js/app-kanban.js": {
-    "file": "assets/app-kanban-BP-d0yTk.js",
+    "file": "assets/app-kanban-Bbup0-RV.js",
     "name": "app-kanban",
     "src": "resources/assets/js/app-kanban.js",
     "isEntry": true
@@ -1287,7 +1041,7 @@
     "isEntry": true
   },
   "resources/assets/vendor/fonts/flag-icons.scss": {
-    "file": "assets/flag-icons-CdvMCC-L.css",
+    "file": "assets/flag-icons-PQqiJUfD.css",
     "src": "resources/assets/vendor/fonts/flag-icons.scss",
     "isEntry": true
   },
@@ -3460,7 +3214,7 @@
     "src": "resources/assets/vendor/fonts/flags/4x3/zw.svg"
   },
   "resources/assets/vendor/fonts/fontawesome.scss": {
-    "file": "assets/fontawesome-C4Uer_J2.css",
+    "file": "assets/fontawesome-2L-j8slS.css",
     "src": "resources/assets/vendor/fonts/fontawesome.scss",
     "isEntry": true
   },
@@ -3497,7 +3251,7 @@
     "src": "resources/assets/vendor/fonts/fontawesome/fa-v4compatibility.woff2"
   },
   "resources/assets/vendor/fonts/iconify/iconify.css": {
-    "file": "assets/iconify-CvNS5qkR.css",
+    "file": "assets/iconify-BGH0gDU1.css",
     "src": "resources/assets/vendor/fonts/iconify/iconify.css",
     "isEntry": true
   },
@@ -3610,21 +3364,21 @@
     "isEntry": true
   },
   "resources/assets/vendor/js/template-customizer copy.js": {
-    "file": "assets/template-customizer copy-DpmWRnBJ.js",
+    "file": "assets/template-customizer copy-C1knKCg5.js",
     "name": "template-customizer copy",
     "src": "resources/assets/vendor/js/template-customizer copy.js",
     "isEntry": true,
     "imports": [
-      "__template-customizer-C0mD0SaO.js"
+      "__template-customizer-CMirTUiP.js"
     ]
   },
   "resources/assets/vendor/js/template-customizer.js": {
-    "file": "assets/template-customizer-G0v3Bqmr.js",
+    "file": "assets/template-customizer-DKUS8asw.js",
     "name": "template-customizer",
     "src": "resources/assets/vendor/js/template-customizer.js",
     "isEntry": true,
     "imports": [
-      "__template-customizer-C0mD0SaO.js"
+      "__template-customizer-CMirTUiP.js"
     ]
   },
   "resources/assets/vendor/js/waitdon.js": {
@@ -3634,36 +3388,37 @@
     "isEntry": true
   },
   "resources/assets/vendor/libs/@algolia/autocomplete-js.js": {
-    "file": "assets/autocomplete-js-eu2E8M3x.js",
+    "file": "assets/autocomplete-js-CaktqXlL.js",
     "name": "autocomplete-js",
     "src": "resources/assets/vendor/libs/@algolia/autocomplete-js.js",
     "isEntry": true
   },
   "resources/assets/vendor/libs/@form-validation/auto-focus.js": {
-    "file": "assets/auto-focus-DFxCE84q.js",
+    "file": "assets/auto-focus-gx3LVEfk.js",
     "name": "auto-focus",
     "src": "resources/assets/vendor/libs/@form-validation/auto-focus.js",
     "isEntry": true,
     "imports": [
-      "_index-CRnahbGi.js"
+      "_index-eQWVPmsa.js"
     ]
   },
   "resources/assets/vendor/libs/@form-validation/bootstrap5.js": {
-    "file": "assets/bootstrap5-B5Ht96aD.js",
+    "file": "assets/bootstrap5-B8xweYSi.js",
     "name": "bootstrap5",
     "src": "resources/assets/vendor/libs/@form-validation/bootstrap5.js",
     "isEntry": true,
     "imports": [
-      "_index-CRnahbGi.js"
+      "_index-eQWVPmsa.js"
     ]
   },
   "resources/assets/vendor/libs/@form-validation/form-validation.scss": {
-    "file": "assets/form-validation-LGZ8W9wj.css",
+    "file": "assets/form-validation-l0sNRNKZ.js",
+    "name": "form-validation",
     "src": "resources/assets/vendor/libs/@form-validation/form-validation.scss",
     "isEntry": true
   },
   "resources/assets/vendor/libs/@form-validation/popular.js": {
-    "file": "assets/popular-DOLngQxq.js",
+    "file": "assets/popular-DHD2IDQ4.js",
     "name": "popular",
     "src": "resources/assets/vendor/libs/@form-validation/popular.js",
     "isEntry": true,
@@ -3672,7 +3427,7 @@
     ]
   },
   "resources/assets/vendor/libs/animate-css/animate.scss": {
-    "file": "assets/animate-elEc8S1v.css",
+    "file": "assets/animate-D7XwstGn.css",
     "src": "resources/assets/vendor/libs/animate-css/animate.scss",
     "isEntry": true
   },
@@ -3686,12 +3441,13 @@
     ]
   },
   "resources/assets/vendor/libs/animate-on-scroll/animate-on-scroll.scss": {
-    "file": "assets/animate-on-scroll-BhPBomNc.css",
+    "file": "assets/animate-on-scroll-l0sNRNKZ.js",
+    "name": "animate-on-scroll",
     "src": "resources/assets/vendor/libs/animate-on-scroll/animate-on-scroll.scss",
     "isEntry": true
   },
   "resources/assets/vendor/libs/apex-charts/apex-charts.scss": {
-    "file": "assets/apex-charts-CXgdmaYc.css",
+    "file": "assets/apex-charts-I3eSIoK_.css",
     "src": "resources/assets/vendor/libs/apex-charts/apex-charts.scss",
     "isEntry": true
   },
@@ -3737,7 +3493,7 @@
     "isEntry": true
   },
   "resources/assets/vendor/libs/bootstrap-select/bootstrap-select.scss": {
-    "file": "assets/bootstrap-select-DiOujeOs.css",
+    "file": "assets/bootstrap-select-Df2voOkL.css",
     "src": "resources/assets/vendor/libs/bootstrap-select/bootstrap-select.scss",
     "isEntry": true
   },
@@ -3751,19 +3507,8 @@
     ]
   },
   "resources/assets/vendor/libs/bs-stepper/bs-stepper.scss": {
-    "file": "assets/bs-stepper-wWSDvvN1.css",
+    "file": "assets/bs-stepper-fx0zpjNk.css",
     "src": "resources/assets/vendor/libs/bs-stepper/bs-stepper.scss",
-    "isEntry": true
-  },
-  "resources/assets/vendor/libs/chartjs/chartjs.js": {
-    "file": "assets/chartjs-Bbkx3pQt.js",
-    "name": "chartjs",
-    "src": "resources/assets/vendor/libs/chartjs/chartjs.js",
-    "isEntry": true
-  },
-  "resources/assets/vendor/libs/chartjs/chartjs.scss": {
-    "file": "assets/chartjs-CqUNMdT0.css",
-    "src": "resources/assets/vendor/libs/chartjs/chartjs.scss",
     "isEntry": true
   },
   "resources/assets/vendor/libs/cleave-zen/cleave-zen.js": {
@@ -3794,27 +3539,27 @@
     ]
   },
   "resources/assets/vendor/libs/datatables-bs5/datatables.bootstrap5.scss": {
-    "file": "assets/datatables-D6mlTnVo.css",
+    "file": "assets/datatables-CSjpLKBJ.css",
     "src": "resources/assets/vendor/libs/datatables-bs5/datatables.bootstrap5.scss",
     "isEntry": true
   },
   "resources/assets/vendor/libs/datatables-buttons-bs5/buttons.bootstrap5.scss": {
-    "file": "assets/buttons-oUWnDyX6.css",
+    "file": "assets/buttons-DQ0TO5b4.css",
     "src": "resources/assets/vendor/libs/datatables-buttons-bs5/buttons.bootstrap5.scss",
     "isEntry": true
   },
   "resources/assets/vendor/libs/datatables-fixedcolumns-bs5/fixedcolumns.bootstrap5.scss": {
-    "file": "assets/fixedcolumns-CfvodhqZ.css",
+    "file": "assets/fixedcolumns-DLgiIaBL.css",
     "src": "resources/assets/vendor/libs/datatables-fixedcolumns-bs5/fixedcolumns.bootstrap5.scss",
     "isEntry": true
   },
   "resources/assets/vendor/libs/datatables-fixedheader-bs5/fixedheader.bootstrap5.scss": {
-    "file": "assets/fixedheader-DliToX6a.css",
+    "file": "assets/fixedheader-C-HXeLKj.css",
     "src": "resources/assets/vendor/libs/datatables-fixedheader-bs5/fixedheader.bootstrap5.scss",
     "isEntry": true
   },
   "resources/assets/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.scss": {
-    "file": "assets/responsive-DCmsTaSd.css",
+    "file": "assets/responsive-LBw9CTLt.css",
     "src": "resources/assets/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.scss",
     "isEntry": true
   },
@@ -3824,7 +3569,7 @@
     "isEntry": true
   },
   "resources/assets/vendor/libs/datatables-select-bs5/select.bootstrap5.scss": {
-    "file": "assets/select-BdOhGgQM.css",
+    "file": "assets/select-cgYeKl5Y.css",
     "src": "resources/assets/vendor/libs/datatables-select-bs5/select.bootstrap5.scss",
     "isEntry": true
   },
@@ -3838,7 +3583,7 @@
     ]
   },
   "resources/assets/vendor/libs/dropzone/dropzone.scss": {
-    "file": "assets/dropzone-wJ-FSDB9.css",
+    "file": "assets/dropzone-DtLzLg5M.css",
     "src": "resources/assets/vendor/libs/dropzone/dropzone.scss",
     "isEntry": true
   },
@@ -3857,16 +3602,16 @@
     "isEntry": true
   },
   "resources/assets/vendor/libs/fullcalendar/fullcalendar.js": {
-    "file": "assets/fullcalendar-we0JkEo4.js",
+    "file": "assets/fullcalendar-DJBGOsn0.js",
     "name": "fullcalendar",
     "src": "resources/assets/vendor/libs/fullcalendar/fullcalendar.js",
     "isEntry": true,
     "imports": [
-      "_index-BJ3qHF3B.js"
+      "_index-CGYv73xd.js"
     ]
   },
   "resources/assets/vendor/libs/fullcalendar/fullcalendar.scss": {
-    "file": "assets/fullcalendar-CP0cIHNg.css",
+    "file": "assets/fullcalendar-BR2z9yNW.css",
     "src": "resources/assets/vendor/libs/fullcalendar/fullcalendar.scss",
     "isEntry": true
   },
@@ -3877,7 +3622,7 @@
     "isEntry": true
   },
   "resources/assets/vendor/libs/highlight/highlight-github.scss": {
-    "file": "assets/highlight-github-BfC0goYb.css",
+    "file": "assets/highlight-github-CpunAPnS.css",
     "src": "resources/assets/vendor/libs/highlight/highlight-github.scss",
     "isEntry": true
   },
@@ -3891,7 +3636,7 @@
     ]
   },
   "resources/assets/vendor/libs/highlight/highlight.scss": {
-    "file": "assets/highlight-DGVygr29.css",
+    "file": "assets/highlight--AnlRCgk.css",
     "src": "resources/assets/vendor/libs/highlight/highlight.scss",
     "isEntry": true
   },
@@ -3906,8 +3651,8 @@
     ]
   },
   "resources/assets/vendor/libs/jkanban/jkanban.scss": {
-    "file": "assets/jkanban-DixFByZm.css",
-    "src": "resources/assets/vendor/libs/jkanban/jkanban.scss",
+    "file": "assets/page-profile-tn0RQdqM.css",
+    "src": "resources/assets/vendor/scss/pages/page-profile.scss",
     "isEntry": true
   },
   "resources/assets/vendor/libs/jquery-idletimer/jquery-idletimer.js": {
@@ -3932,8 +3677,8 @@
     ]
   },
   "resources/assets/vendor/libs/jquery-timepicker/jquery-timepicker.scss": {
-    "file": "assets/jquery-timepicker-BpOTdeGI.css",
-    "src": "resources/assets/vendor/libs/jquery-timepicker/jquery-timepicker.scss",
+    "file": "assets/page-profile-tn0RQdqM.css",
+    "src": "resources/assets/vendor/scss/pages/page-profile.scss",
     "isEntry": true
   },
   "resources/assets/vendor/libs/jquery/jquery.js": {
@@ -3957,8 +3702,8 @@
     ]
   },
   "resources/assets/vendor/libs/jstree/jstree.scss": {
-    "file": "assets/jstree-Dtmjx5I4.css",
-    "src": "resources/assets/vendor/libs/jstree/jstree.scss",
+    "file": "assets/page-profile-tn0RQdqM.css",
+    "src": "resources/assets/vendor/scss/pages/page-profile.scss",
     "isEntry": true
   },
   "resources/assets/vendor/libs/jstree/themes/default-dark/32px.png": {
@@ -4000,7 +3745,7 @@
     ]
   },
   "resources/assets/vendor/libs/leaflet/leaflet.scss": {
-    "file": "assets/leaflet-o-JJLc7F.css",
+    "file": "assets/leaflet-B3684NxF.css",
     "src": "resources/assets/vendor/libs/leaflet/leaflet.scss",
     "isEntry": true
   },
@@ -4052,33 +3797,8 @@
     ]
   },
   "resources/assets/vendor/libs/node-waves/node-waves.scss": {
-    "file": "assets/node-waves--n8WzYZJ.css",
+    "file": "assets/node-waves-BSpsbj9Z.css",
     "src": "resources/assets/vendor/libs/node-waves/node-waves.scss",
-    "isEntry": true
-  },
-  "resources/assets/vendor/libs/notiflix/notiflix.js": {
-    "file": "assets/notiflix-CC0UUZC3.js",
-    "name": "notiflix",
-    "src": "resources/assets/vendor/libs/notiflix/notiflix.js",
-    "isEntry": true,
-    "imports": [
-      "__commonjsHelpers-D6-XlEtG.js"
-    ]
-  },
-  "resources/assets/vendor/libs/notiflix/notiflix.scss": {
-    "file": "assets/notiflix-Bsa5AQAm.css",
-    "src": "resources/assets/vendor/libs/notiflix/notiflix.scss",
-    "isEntry": true
-  },
-  "resources/assets/vendor/libs/notyf/notyf.js": {
-    "file": "assets/notyf-DUP0mdC1.js",
-    "name": "notyf",
-    "src": "resources/assets/vendor/libs/notyf/notyf.js",
-    "isEntry": true
-  },
-  "resources/assets/vendor/libs/notyf/notyf.scss": {
-    "file": "assets/notyf-l7JFtuen.css",
-    "src": "resources/assets/vendor/libs/notyf/notyf.scss",
     "isEntry": true
   },
   "resources/assets/vendor/libs/nouislider/nouislider.js": {
@@ -4088,8 +3808,8 @@
     "isEntry": true
   },
   "resources/assets/vendor/libs/nouislider/nouislider.scss": {
-    "file": "assets/nouislider-Drzsy2ay.css",
-    "src": "resources/assets/vendor/libs/nouislider/nouislider.scss",
+    "file": "assets/page-profile-tn0RQdqM.css",
+    "src": "resources/assets/vendor/scss/pages/page-profile.scss",
     "isEntry": true
   },
   "resources/assets/vendor/libs/numeral/numeral.js": {
@@ -4111,12 +3831,12 @@
     ]
   },
   "resources/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.scss": {
-    "file": "assets/perfect-scrollbar-CfyPsj0y.css",
+    "file": "assets/perfect-scrollbar-j3tD2nM3.css",
     "src": "resources/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.scss",
     "isEntry": true
   },
   "resources/assets/vendor/libs/pickr/pickr-themes.scss": {
-    "file": "assets/pickr-themes-Dvmz12Qr.css",
+    "file": "assets/pickr-themes-BTmg6vII.css",
     "src": "resources/assets/vendor/libs/pickr/pickr-themes.scss",
     "isEntry": true
   },
@@ -4149,36 +3869,6 @@
       "__commonjsHelpers-D6-XlEtG.js"
     ]
   },
-  "resources/assets/vendor/libs/quill/editor.scss": {
-    "file": "assets/editor-Bxd253fI.css",
-    "src": "resources/assets/vendor/libs/quill/editor.scss",
-    "isEntry": true
-  },
-  "resources/assets/vendor/libs/quill/katex.js": {
-    "file": "assets/katex-CeYKIl92.js",
-    "name": "katex",
-    "src": "resources/assets/vendor/libs/quill/katex.js",
-    "isEntry": true
-  },
-  "resources/assets/vendor/libs/quill/katex.scss": {
-    "file": "assets/katex-B5H2q2wA.css",
-    "src": "resources/assets/vendor/libs/quill/katex.scss",
-    "isEntry": true
-  },
-  "resources/assets/vendor/libs/quill/quill.js": {
-    "file": "assets/quill-CeAyyUnh.js",
-    "name": "quill",
-    "src": "resources/assets/vendor/libs/quill/quill.js",
-    "isEntry": true,
-    "imports": [
-      "__commonjsHelpers-D6-XlEtG.js"
-    ]
-  },
-  "resources/assets/vendor/libs/quill/typography.scss": {
-    "file": "assets/typography-BL_JIB98.css",
-    "src": "resources/assets/vendor/libs/quill/typography.scss",
-    "isEntry": true
-  },
   "resources/assets/vendor/libs/raty-js/raty-js.js": {
     "file": "assets/raty-js-BU826p8z.js",
     "name": "raty-js",
@@ -4186,7 +3876,7 @@
     "isEntry": true
   },
   "resources/assets/vendor/libs/raty-js/raty-js.scss": {
-    "file": "assets/raty-js-FRCb2XYL.css",
+    "file": "assets/raty-js-CfBw9TCX.css",
     "src": "resources/assets/vendor/libs/raty-js/raty-js.scss",
     "isEntry": true
   },
@@ -4226,17 +3916,31 @@
     ]
   },
   "resources/assets/vendor/libs/spinkit/spinkit.scss": {
-    "file": "assets/spinkit-CzIplFrd.css",
+    "file": "assets/spinkit-DVF5TdMs.css",
     "src": "resources/assets/vendor/libs/spinkit/spinkit.scss",
     "isEntry": true
   },
+  "resources/assets/vendor/libs/summernote/summernote-fonts.css": {
+    "file": "assets/summernote-fonts-9Rt6tbCz.css",
+    "src": "resources/assets/vendor/libs/summernote/summernote-fonts.css",
+    "isEntry": true
+  },
   "resources/assets/vendor/libs/summernote/summernote.js": {
-    "file": "assets/summernote-BR-AOT1x.js",
+    "file": "assets/summernote-D6FD5_tv.js",
     "name": "summernote",
     "src": "resources/assets/vendor/libs/summernote/summernote.js",
     "isEntry": true,
     "imports": [
       "_jquery-BQXThELV.js"
+    ],
+    "css": [
+      "assets/summernote-Db0vQMex.css"
+    ],
+    "assets": [
+      "assets/summernote-jt9apK1s.eot",
+      "assets/summernote-tk6LuLER.woff2",
+      "assets/summernote-MGhHcnpK.woff",
+      "assets/summernote-BDPkqvsB.ttf"
     ]
   },
   "resources/assets/vendor/libs/summernote/summernote.scss": {
@@ -4254,7 +3958,7 @@
     ]
   },
   "resources/assets/vendor/libs/sweetalert2/sweetalert2.scss": {
-    "file": "assets/sweetalert2-BtjM56gQ.css",
+    "file": "assets/sweetalert2-g-RS76-y.css",
     "src": "resources/assets/vendor/libs/sweetalert2/sweetalert2.scss",
     "isEntry": true
   },
@@ -4265,7 +3969,7 @@
     "isEntry": true
   },
   "resources/assets/vendor/libs/swiper/swiper.scss": {
-    "file": "assets/swiper-BTYVbvbR.css",
+    "file": "assets/swiper-CRJuRfdz.css",
     "src": "resources/assets/vendor/libs/swiper/swiper.scss",
     "isEntry": true
   },
@@ -4309,12 +4013,12 @@
     ]
   },
   "resources/assets/vendor/libs/typeahead-js/typeahead.scss": {
-    "file": "assets/typeahead-CROfg2SJ.css",
-    "src": "resources/assets/vendor/libs/typeahead-js/typeahead.scss",
+    "file": "assets/page-profile-tn0RQdqM.css",
+    "src": "resources/assets/vendor/scss/pages/page-profile.scss",
     "isEntry": true
   },
   "resources/assets/vendor/scss/but.scss": {
-    "file": "assets/but-BgtrmYLU.css",
+    "file": "assets/but-DkOTWLS8.css",
     "src": "resources/assets/vendor/scss/but.scss",
     "isEntry": true
   },
@@ -4324,63 +4028,63 @@
     "isEntry": true
   },
   "resources/assets/vendor/scss/core.scss": {
-    "file": "assets/core-BfBqc-4X.css",
+    "file": "assets/core-BHh59C8k.css",
     "src": "resources/assets/vendor/scss/core.scss",
     "isEntry": true
   },
   "resources/assets/vendor/scss/pages/app-academy-details.scss": {
-    "file": "assets/app-academy-details-BuwjRnXj.css",
-    "src": "resources/assets/vendor/scss/pages/app-academy-details.scss",
+    "file": "assets/page-profile-tn0RQdqM.css",
+    "src": "resources/assets/vendor/scss/pages/page-profile.scss",
     "isEntry": true
   },
   "resources/assets/vendor/scss/pages/app-academy.scss": {
-    "file": "assets/app-academy-D9nDJ5Pd.css",
-    "src": "resources/assets/vendor/scss/pages/app-academy.scss",
+    "file": "assets/page-profile-tn0RQdqM.css",
+    "src": "resources/assets/vendor/scss/pages/page-profile.scss",
     "isEntry": true
   },
   "resources/assets/vendor/scss/pages/app-calendar.scss": {
-    "file": "assets/app-calendar-CW21dSWB.css",
+    "file": "assets/app-calendar-CKa_SzdP.css",
     "src": "resources/assets/vendor/scss/pages/app-calendar.scss",
     "isEntry": true
   },
   "resources/assets/vendor/scss/pages/app-chat.scss": {
-    "file": "assets/app-chat-KpAxoOuC.css",
+    "file": "assets/app-chat-1s2PXJt9.css",
     "src": "resources/assets/vendor/scss/pages/app-chat.scss",
     "isEntry": true
   },
   "resources/assets/vendor/scss/pages/app-ecommerce.scss": {
-    "file": "assets/app-ecommerce-Bl9elaUa.css",
+    "file": "assets/app-ecommerce-CE8WN4Ds.css",
     "src": "resources/assets/vendor/scss/pages/app-ecommerce.scss",
     "isEntry": true
   },
   "resources/assets/vendor/scss/pages/app-email.scss": {
-    "file": "assets/app-email-DI1jObp2.css",
-    "src": "resources/assets/vendor/scss/pages/app-email.scss",
+    "file": "assets/page-profile-tn0RQdqM.css",
+    "src": "resources/assets/vendor/scss/pages/page-profile.scss",
     "isEntry": true
   },
   "resources/assets/vendor/scss/pages/app-invoice-print.scss": {
-    "file": "assets/app-invoice-print-DtK0Q96P.css",
+    "file": "assets/app-invoice-print-iwWlB1Sq.css",
     "src": "resources/assets/vendor/scss/pages/app-invoice-print.scss",
     "isEntry": true
   },
   "resources/assets/vendor/scss/pages/app-invoice.scss": {
-    "file": "assets/app-invoice-CTbTIOY8.css",
-    "src": "resources/assets/vendor/scss/pages/app-invoice.scss",
+    "file": "assets/page-profile-tn0RQdqM.css",
+    "src": "resources/assets/vendor/scss/pages/page-profile.scss",
     "isEntry": true
   },
   "resources/assets/vendor/scss/pages/app-kanban.scss": {
-    "file": "assets/app-kanban-DaALJ7-s.css",
-    "src": "resources/assets/vendor/scss/pages/app-kanban.scss",
+    "file": "assets/page-profile-tn0RQdqM.css",
+    "src": "resources/assets/vendor/scss/pages/page-profile.scss",
     "isEntry": true
   },
   "resources/assets/vendor/scss/pages/app-logistics-dashboard.scss": {
-    "file": "assets/app-logistics-dashboard-CWkyDXrT.css",
+    "file": "assets/app-logistics-dashboard-C7JHGj8f.css",
     "src": "resources/assets/vendor/scss/pages/app-logistics-dashboard.scss",
     "isEntry": true
   },
   "resources/assets/vendor/scss/pages/app-logistics-fleet.scss": {
-    "file": "assets/app-logistics-fleet-BvsTa0Jn.css",
-    "src": "resources/assets/vendor/scss/pages/app-logistics-fleet.scss",
+    "file": "assets/page-profile-tn0RQdqM.css",
+    "src": "resources/assets/vendor/scss/pages/page-profile.scss",
     "isEntry": true
   },
   "resources/assets/vendor/scss/pages/cards-advance.scss": {
@@ -4389,12 +4093,12 @@
     "isEntry": true
   },
   "resources/assets/vendor/scss/pages/front-page-help-center.scss": {
-    "file": "assets/front-page-help-center-Dx4aNzWs.css",
-    "src": "resources/assets/vendor/scss/pages/front-page-help-center.scss",
+    "file": "assets/page-profile-tn0RQdqM.css",
+    "src": "resources/assets/vendor/scss/pages/page-profile.scss",
     "isEntry": true
   },
   "resources/assets/vendor/scss/pages/front-page-landing.scss": {
-    "file": "assets/front-page-landing--VKm3k8q.css",
+    "file": "assets/front-page-landing-CUX2CWbk.css",
     "src": "resources/assets/vendor/scss/pages/front-page-landing.scss",
     "isEntry": true
   },
@@ -4404,33 +4108,33 @@
     "isEntry": true
   },
   "resources/assets/vendor/scss/pages/front-page-pricing.scss": {
-    "file": "assets/front-page-pricing-C3vnHm9P.css",
-    "src": "resources/assets/vendor/scss/pages/front-page-pricing.scss",
+    "file": "assets/page-pricing-CpmbCG9Z.css",
+    "src": "resources/assets/vendor/scss/pages/page-pricing.scss",
     "isEntry": true
   },
   "resources/assets/vendor/scss/pages/front-page.scss": {
-    "file": "assets/front-page-DRGSqtxw.css",
+    "file": "assets/front-page-Cnoq7O1N.css",
     "src": "resources/assets/vendor/scss/pages/front-page.scss",
     "isEntry": true
   },
   "resources/assets/vendor/scss/pages/page-auth.scss": {
-    "file": "assets/page-auth-Pg0XbvmT.css",
+    "file": "assets/page-auth-CUrqo385.css",
     "src": "resources/assets/vendor/scss/pages/page-auth.scss",
     "isEntry": true
   },
   "resources/assets/vendor/scss/pages/page-faq.scss": {
-    "file": "assets/page-faq-DN1XJLO0.css",
-    "src": "resources/assets/vendor/scss/pages/page-faq.scss",
+    "file": "assets/page-profile-tn0RQdqM.css",
+    "src": "resources/assets/vendor/scss/pages/page-profile.scss",
     "isEntry": true
   },
   "resources/assets/vendor/scss/pages/page-icons.scss": {
-    "file": "assets/page-icons-DTE0xAHg.css",
-    "src": "resources/assets/vendor/scss/pages/page-icons.scss",
+    "file": "assets/page-profile-tn0RQdqM.css",
+    "src": "resources/assets/vendor/scss/pages/page-profile.scss",
     "isEntry": true
   },
   "resources/assets/vendor/scss/pages/page-misc.scss": {
-    "file": "assets/page-misc-s8aLeZRL.css",
-    "src": "resources/assets/vendor/scss/pages/page-misc.scss",
+    "file": "assets/page-profile-tn0RQdqM.css",
+    "src": "resources/assets/vendor/scss/pages/page-profile.scss",
     "isEntry": true
   },
   "resources/assets/vendor/scss/pages/page-pricing.scss": {
@@ -4439,7 +4143,7 @@
     "isEntry": true
   },
   "resources/assets/vendor/scss/pages/page-profile.scss": {
-    "file": "assets/page-profile-CDfJC1kS.css",
+    "file": "assets/page-profile-tn0RQdqM.css",
     "src": "resources/assets/vendor/scss/pages/page-profile.scss",
     "isEntry": true
   },
@@ -4475,7 +4179,7 @@
     "isEntry": true
   },
   "resources/css/navbar-front.css": {
-    "file": "assets/navbar-front-D899oFzh.css",
+    "file": "assets/navbar-front-bcfqnnJn.css",
     "src": "resources/css/navbar-front.css",
     "isEntry": true
   },
@@ -4541,7 +4245,8 @@
     "isEntry": true
   },
   "resources/scss/base/pages/news.scss": {
-    "file": "assets/news-BVGihTHN.css",
+    "file": "assets/news-l0sNRNKZ.js",
+    "name": "news",
     "src": "resources/scss/base/pages/news.scss",
     "isEntry": true
   }

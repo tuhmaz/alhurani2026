@@ -8,7 +8,8 @@
 
 const commentEditor = document.querySelector('.comment-editor');
 
-if (commentEditor) {
+// Quill editor removed - use Summernote if comment editor is needed
+/* if (commentEditor) {
   new Quill(commentEditor, {
     modules: {
       toolbar: '.comment-toolbar'
@@ -16,7 +17,7 @@ if (commentEditor) {
     placeholder: 'Write a Comment...',
     theme: 'snow'
   });
-}
+} */
 
 // Datatable (js)
 document.addEventListener('DOMContentLoaded', function (e) {

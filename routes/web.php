@@ -65,37 +65,37 @@ use App\Http\Controllers\Dashboard\settings\ReportsController;
 Route::get('/vb/node/{id}', function ($id) {
     // إذا عندك جدول مقالات قديم يربط ID القديم بالجديد، استبدل هذا حسب الحاجة
     // مؤقتًا نعيد التوجيه للصفحة الرئيسية أو صفحة المقالات
-    return redirect('https://alemancenter.com/articles/' . $id, 301);
+    return redirect(url('/articles/' . $id), 301);
 });
 
 // مثال: إعادة توجيه vb/search إلى صفحة البحث الجديدة
 Route::get('/vb/search', function () {
-    return redirect('https://alemancenter.com/search', 301);
+    return redirect(url('/search'), 301);
 });
 
 // أي روابط vb أخرى غير معرفة → تحويل للصفحة الرئيسية
 Route::get('/vb/{any}', function () {
-    return redirect('https://alemancenter.com', 301);
+    return redirect(url('/'), 301);
 })->where('any', '.*');
 // أي رابط قديم من نظام vb (node, search, الخ) → توجيه للصفحة الرئيسية
 
 // نفس الشيء لو عندك forum/ أو threads/ من النظام القديم
 Route::get('/forum/{any?}', function () {
-    return redirect('https://alemancenter.com', 301);
+    return redirect(url('/'), 301);
 })->where('any', '.*');
 
 Route::get('/threads/{any?}', function () {
-    return redirect('https://alemancenter.com', 301);
+    return redirect(url('/'), 301);
 })->where('any', '.*');
 
 // أي رابط يبدأ بـ /up/ → إعادة توجيه للصفحة الرئيسية
 Route::get('/up/{any?}', function () {
-    return redirect('https://alemancenter.com', 301);
+    return redirect(url('/'), 301);
 })->where('any', '.*');
 
 // إعادة توجيه مباشر للملف do.php وأي استعلام (id=...) → الصفحة الرئيسية
 Route::get('/up/do.php', function () {
-    return redirect('https://alemancenter.com', 301);
+    return redirect(url('/'), 301);
 });
 
 // الصفحة الرئيسية

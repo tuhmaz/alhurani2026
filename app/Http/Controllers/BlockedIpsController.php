@@ -2,21 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\BlockedIp;
+use App\Models\BannedIp;
 use Illuminate\Http\Request;
 
 class BlockedIpsController extends Controller
 {
     public function index()
     {
-        $blockedIps = BlockedIp::with('blockedBy')
-            ->latest('blocked_at')
+        $blockedIps = BannedIp::with('blockedBy')
+            ->latest('created_at')
             ->paginate(15);
 
         return view('dashboard.security.blocked-ips.index', compact('blockedIps'));
     }
 
-    public function destroy(BlockedIp $blockedIp)
+    public function destroy(BannedIp $blockedIp)
     {
         $blockedIp->delete();
         return redirect()->route('security.blocked-ips.index')
@@ -27,10 +27,10 @@ class BlockedIpsController extends Controller
     {
         $request->validate([
             'ids' => 'required|array',
-            'ids.*' => 'exists:blocked_ips,id'
+            'ids.*' => 'exists:banned_ips,id'
         ]);
 
-        BlockedIp::whereIn('id', $request->ids)->delete();
+        BannedIp::whereIn('id', $request->ids)->delete();
 
         return response()->json([
             'success' => true,

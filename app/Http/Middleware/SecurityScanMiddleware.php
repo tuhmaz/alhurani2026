@@ -71,6 +71,24 @@ class SecurityScanMiddleware
             }
         }
 
+        // السماح بصور base64 الشرعية من محرر Summernote
+        // فحص إذا كان الطلب يحتوي على محتوى من Summernote (عادة يكون في حقول معينة)
+        $isSummernoteContent = false;
+        $summernoteFields = ['content', 'description', 'body', 'message', 'details'];
+        foreach ($summernoteFields as $field) {
+            if ($request->has($field) && is_string($request->input($field))) {
+                $content = $request->input($field);
+                // التحقق من وجود صور base64 شرعية (data:image)
+                if (preg_match('/data:image\/(png|jpeg|jpg|gif|webp);base64,/i', $content)) {
+                    $isSummernoteContent = true;
+                    break;
+                }
+            }
+        }
+
+        // تمرير معلومة للـ middleware لتخطي فحص base64 في حالة Summernote
+        $request->attributes->set('allow_base64_images', $isSummernoteContent);
+
         // فحص الطلب بحثًا عن أنماط هجمات محتملة
         if ($this->detectSqlInjection($request) || $this->detectXssAttack($request)) {
             // حظر تلقائي للـ IP عند اكتشاف محاولة هجوم
@@ -142,22 +160,43 @@ class SecurityScanMiddleware
     protected function detectXssAttack(Request $request): bool
     {
         $patterns = [
-            '/<script\b[^>]*>(.*?)<\/script>/i',
+            '/<script\b[^>]*>(.*?)<\/script>/is',
             '/javascript\s*:/i',
-            '/on(load|click|mouseover|submit|focus|blur|change|error|select)\s*=/i',
-            '/<\s*img[^>]+src\s*=\s*[\'"]?\s*(javascript|data|vbscript):/i',
+            '/on\w+\s*=/i', // تحسين: يغطي جميع event handlers (onclick, onload, إلخ)
+            '/<\s*img[^>]+src\s*=\s*[\'"]?\s*(javascript|vbscript):/i', // إزالة data: من هنا لأن data:image شرعي
             '/<\s*iframe/i',
             '/<\s*object/i',
             '/<\s*embed/i',
+            '/<\s*applet/i', // إضافة من BlockXssAttempts
             '/<\s*form/i',
+            '/<\s*input/i', // إضافة من BlockXssAttempts
+            '/<\s*button/i', // إضافة من BlockXssAttempts
+            '/<\s*select/i', // إضافة من BlockXssAttempts
+            '/<\s*textarea/i', // إضافة من BlockXssAttempts
+            '/<\s*meta/i', // إضافة من BlockXssAttempts
+            '/<\s*link/i', // إضافة من BlockXssAttempts
+            '/<\s*style/i', // إضافة من BlockXssAttempts
+            '/<\s*svg/i', // إضافة من BlockXssAttempts
+            '/<\?php/i', // إضافة من BlockXssAttempts
+            '/<%\?/i', // إضافة من BlockXssAttempts (ASP tags)
             '/document\.(cookie|write|location|open|eval)/i',
             '/eval\s*\(/i',
             '/expression\s*\(/i',
-            '/base64/i',
             '/alert\s*\(/i',
             '/confirm\s*\(/i',
             '/prompt\s*\(/i',
         ];
+
+        // فحص base64 فقط إذا لم يكن محتوى شرعي من Summernote
+        $allowBase64Images = $request->attributes->get('allow_base64_images', false);
+        if (!$allowBase64Images) {
+            // فحص استخدامات base64 الخبيثة فقط (مع atob, btoa, fromCharCode)
+            $patterns[] = '/atob\s*\(/i'; // تحويل base64 إلى نص (شائع في XSS)
+            $patterns[] = '/btoa\s*\(/i'; // تحويل نص إلى base64 (قد يخفي كود خبيث)
+            $patterns[] = '/fromCharCode\s*\(/i'; // تحويل أرقام إلى نص (تشويش الكود)
+            $patterns[] = '/data:text\/html.*base64/i'; // HTML مضمن بـ base64 (خطير)
+            $patterns[] = '/data:application.*base64/i'; // تطبيقات مضمنة بـ base64 (خطير)
+        }
 
         return $this->checkPatterns($request, $patterns, 'xss_attempt');
     }

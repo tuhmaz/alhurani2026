@@ -1,0 +1,30 @@
+/* Summernote Icon Font - Custom font-face with relative paths to built assets */
+/* This file ensures @font-face survives PurgeCSS by being imported separately */
+
+@font-face {
+  font-family: "summernote";
+  font-style: normal;
+  font-weight: 400;
+  font-display: auto;
+  /* Vite will copy these fonts and update the URLs automatically */
+  src: url("~summernote/dist/font/summernote.eot?#iefix") format("embedded-opentype"),
+       url("~summernote/dist/font/summernote.woff2") format("woff2"),
+       url("~summernote/dist/font/summernote.woff") format("woff"),
+       url("~summernote/dist/font/summernote.ttf") format("truetype");
+}
+
+/* Icon base classes */
+[class^="note-icon"]:before,
+[class*=" note-icon"]:before {
+  display: inline-block;
+  font-family: "summernote";
+  font-style: normal;
+  font-size: inherit;
+  text-decoration: inherit;
+  text-rendering: auto;
+  text-transform: none;
+  vertical-align: middle;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  speak: none;
+}

@@ -6,18 +6,7 @@
 // Variables
 $dz-box-padding: 0 !default;
 
-/* App eCommerce quill editor settings */
-
-.app-ecommerce-category,
-.app-ecommerce {
-  .comment-editor {
-    .ql-editor {
-      border-start-end-radius: $border-radius;
-      border-start-start-radius: $border-radius;
-      min-block-size: 7rem;
-    }
-  }
-}
+/* Quill editor styles removed - use Summernote instead */
 
 /* star-rating */
 .raty img {

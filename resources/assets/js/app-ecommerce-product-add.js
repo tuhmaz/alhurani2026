@@ -10,7 +10,8 @@
 
   const commentEditor = document.querySelector('.comment-editor');
 
-  if (commentEditor) {
+  // Quill editor removed - use Summernote for product description if needed
+  /* if (commentEditor) {
     new Quill(commentEditor, {
       modules: {
         toolbar: '.comment-toolbar'
@@ -18,7 +19,7 @@
       placeholder: 'Product Description',
       theme: 'snow'
     });
-  }
+  } */
 
   // previewTemplate: Updated Dropzone default previewTemplate
 

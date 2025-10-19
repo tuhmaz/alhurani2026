@@ -43,20 +43,8 @@ document.addEventListener('DOMContentLoaded', function () {
     initPerfectScrollbar(selectors.emailFilters);
     initPerfectScrollbar(selectors.emailView);
 
-    // Utility function to initialize Quill Editor
-    const initQuillEditor = (selector, toolbar) => {
-      if (selector) {
-        new Quill(selector, {
-          modules: { toolbar },
-          placeholder: 'Message',
-          theme: 'snow'
-        });
-      }
-    };
-
-    // Initialize editors
-    initQuillEditor(selectors.emailEditor, '.email-editor-toolbar');
-    initQuillEditor(selectors.emailReplyEditor, '.email-reply-toolbar');
+    // Note: Email editors are now handled by Summernote in the Blade templates
+    // The editors should be initialized with data-summernote attribute in the HTML
 
     // Bookmark email functionality
     selectors.bookmarkEmail.forEach(emailItem => {

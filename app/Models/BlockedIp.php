@@ -2,26 +2,17 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-
-class BlockedIp extends Model
+/**
+ * BlockedIp Model - Deprecated
+ *
+ * هذا النموذج تم إيقافه ويستخدم الآن فقط للتوافق العكسي.
+ * يرجى استخدام BannedIp بدلاً منه.
+ *
+ * @deprecated استخدم BannedIp بدلاً من هذا النموذج
+ * @see \App\Models\BannedIp
+ */
+class BlockedIp extends BannedIp
 {
-    use HasFactory;
-
-    protected $fillable = [
-        'ip_address',
-        'reason',
-        'blocked_at',
-        'blocked_by',
-    ];
-
-    protected $casts = [
-        'blocked_at' => 'datetime',
-    ];
-
-    public function blockedBy()
-    {
-        return $this->belongsTo(User::class, 'blocked_by');
-    }
+    // هذا النموذج يرث جميع الوظائف من BannedIp
+    // تم إضافة Accessors و Mutators في BannedIp للتوافق
 }

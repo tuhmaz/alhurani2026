@@ -29,6 +29,8 @@ export default {
               './app/View/Components/**/*.php'
             ],
             defaultExtractor: content => content.match(/[\w-/:%.]+(?<!:)/g) || [],
+            fontFace: true, // Preserve @font-face rules
+            keyframes: true, // Preserve @keyframes rules
             safelist: {
               standard: [
                 'show',
@@ -91,20 +93,37 @@ export default {
                 /^ti-/,
                 /^tabler-/,
 
-                // Summernote (editor) classes generated at runtime
-                /^note-editor/,
-                /^note-toolbar/,
-                /^note-btn/,
-                /^note-statusbar/,
-                /^note-editable/,
-                /^note-placeholder/,
-                /^note-popover/,
-                /^note-hint-group/,
-                /^note-icon-/,
-                // Summernote color/recent swatch helpers
-                /^note-recent-/,
-                /^note-current-/,
-                /^note-color-/
+                // Summernote (editor) classes - comprehensive coverage
+                /^note-/, // Catch all note-* classes
+                /^summernote/, // Font-family and related
+
+                // Specific Summernote classes for better targeting
+                /note-editor/,
+                /note-toolbar/,
+                /note-btn/,
+                /note-statusbar/,
+                /note-editable/,
+                /note-placeholder/,
+                /note-popover/,
+                /note-hint/,
+                /note-icon/,
+                /note-dropdown/,
+                /note-modal/,
+                /note-handle/,
+                /note-resizebar/,
+                /note-editing-area/,
+                /note-codable/,
+                /note-frame/,
+                /note-airframe/,
+                /note-palette/,
+                /note-dimension/,
+                /note-style/,
+                /note-para/,
+                /note-table/,
+                /note-fontsize/,
+                /note-color/,
+                /note-float/,
+                /note-align/
               ],
               greedy: []
             }

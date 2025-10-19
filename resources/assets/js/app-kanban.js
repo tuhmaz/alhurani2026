@@ -62,8 +62,8 @@
     });
   }
 
-  // Comment editor
-  if (commentEditor) {
+  // Quill editor removed - use Summernote for comments if needed
+  /* if (commentEditor) {
     new Quill(commentEditor, {
       modules: {
         toolbar: '.comment-toolbar'
@@ -71,7 +71,7 @@
       placeholder: 'Write a Comment...',
       theme: 'snow'
     });
-  }
+  } */
 
   // Render board dropdown
   const renderBoardDropdown = () => `

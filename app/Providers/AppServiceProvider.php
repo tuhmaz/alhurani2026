@@ -9,6 +9,8 @@ use App\Models\Article;
 use App\Observers\ArticleObserver;
 use App\Models\Post;
 use App\Observers\PostObserver;
+use App\Models\News;
+use App\Observers\NewsObserver;
 use Symfony\Component\VarDumper\VarDumper;
 use Symfony\Component\VarDumper\Dumper\HtmlDumper;
 use Symfony\Component\VarDumper\Cloner\VarCloner;
@@ -96,6 +98,7 @@ class AppServiceProvider extends ServiceProvider
             // Register observers
             Article::observe(ArticleObserver::class);
             Post::observe(PostObserver::class);
+            News::observe(NewsObserver::class);
 
         } catch (\Exception $e) {
             // Log the error but don't stop the application

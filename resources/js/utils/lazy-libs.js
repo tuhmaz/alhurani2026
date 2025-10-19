@@ -65,18 +65,6 @@ export function initDataTables() {
   });
 }
 
-export function initQuill() {
-  onIdle(async () => {
-    const editors = document.querySelectorAll('[data-quill]');
-    if (editors.length === 0) return;
-    const [{ default: Quill }, _css] = await Promise.all([
-      import('quill'),
-      import('quill/dist/quill.snow.css')
-    ]);
-    editors.forEach(el => new Quill(el, { theme: 'snow' }));
-  });
-}
-
 export function initApexCharts() {
   onIdle(async () => {
     const charts = document.querySelectorAll('[data-apexchart]');
@@ -128,7 +116,6 @@ export function initPageLibs() {
   initFlatpickr();
   initSelect2();
   initDataTables();
-  initQuill();
   initApexCharts();
   initLeaflet();
   initSweetAlert2();
