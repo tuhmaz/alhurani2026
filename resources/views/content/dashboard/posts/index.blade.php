@@ -85,7 +85,7 @@ use Illuminate\Support\Str;
               <tr>
                 <td>
                   <div class="avatar">
-                    <img src="{{ Storage::url($item->image) }}"
+                    <img src="{{ $item->image_url }}"
                       alt="{{ $item->title }}"
                       class="rounded"
                       onerror="this.src='{{ asset('assets/img/illustrations/default_news_image.jpg') }}'">

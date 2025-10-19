@@ -155,14 +155,13 @@
                 </label>
               </div>
               <small class="text-muted">{{ __('Leave empty to keep the current image. Allowed formats: jpeg, png, jpg, gif. Max size: 2MB') }}</small>
-              @if($post->image)
-                <div class="mt-2">
-                  <img src="{{ Storage::url($post->image) }}"
-                       alt="{{ $post->alt }}"
-                       class="rounded"
-                       style="max-width: 200px; height: auto;">
-                </div>
-              @endif
+              <div class="mt-2">
+                <img src="{{ $post->image_url }}"
+                     alt="{{ $post->alt }}"
+                     class="rounded"
+                     style="max-width: 200px; height: auto;"
+                     onerror="this.src='{{ asset('assets/img/illustrations/default_news_image.jpg') }}'">
+              </div>
               @error('image')
                 <div class="invalid-feedback">{{ $message }}</div>
               @enderror

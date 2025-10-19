@@ -22,22 +22,25 @@ class BannedIp extends Model
         'updated_at' => 'datetime',
     ];
 
-    // علاقة المستخدم (الأدمن الذي حظر)
-    // ملاحظة: إذا كان banned_by = 0، فهذا يعني حظر تلقائي من النظام
+    /**
+     * علاقة المستخدم (الأدمن الذي حظر)
+     * تستخدم Eager Loading لتجنب N+1 Query Problem
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function admin()
     {
-        // لا نسترجع علاقة إذا كان حظر تلقائي من النظام
-        if ($this->banned_by === 0) {
-            return null;
-        }
-
         return $this->belongsTo(\App\Models\User::class, 'banned_by');
     }
 
-    // Alias للتوافق مع BlockedIp القديم
+    /**
+     * Alias للتوافق مع BlockedIp القديم
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function blockedBy()
     {
-        return $this->admin();
+        return $this->belongsTo(\App\Models\User::class, 'banned_by');
     }
 
     // التحقق إذا الآيبي محظور
@@ -100,6 +103,7 @@ class BannedIp extends Model
 
     /**
      * الحصول على اسم من قام بالحظر
+     * يستخدم Eager Loading عند توفره لتجنب N+1 Query
      *
      * @return string
      */
@@ -109,7 +113,13 @@ class BannedIp extends Model
             return 'النظام (Auto-ban)';
         }
 
-        return $this->admin ? $this->admin->name : 'غير معروف';
+        // استخدام relationLoaded للتحقق من وجود eager loading
+        if ($this->relationLoaded('admin') && $this->admin) {
+            return $this->admin->name;
+        }
+
+        // fallback: تحميل العلاقة فقط عند الحاجة
+        return $this->admin?->name ?? 'غير معروف';
     }
 
     // Accessor للحصول على ip_address (للتوافق مع BlockedIp)

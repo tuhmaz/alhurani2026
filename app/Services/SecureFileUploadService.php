@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Intervention\Image\Laravel\Facades\Image;
@@ -85,7 +86,17 @@ class SecureFileUploadService
 
         // معالجة الصور إذا كان الملف صورة
         if ($processImage && $this->isImage($file)) {
-            return $this->processAndStoreImage($file, $directory, $safeFilename);
+            try {
+                return $this->processAndStoreImage($file, $directory, $safeFilename);
+            } catch (Exception $e) {
+                Log::warning('Image processing failed, falling back to original file storage', [
+                    'error' => $e->getMessage(),
+                    'directory' => $directory,
+                ]);
+
+                $fallbackName = Str::random(10) . '_' . time() . '.' . strtolower($file->getClientOriginalExtension());
+                return $file->storeAs($directory, $fallbackName, 'public');
+            }
         }
 
         // تخزين الملف العادي

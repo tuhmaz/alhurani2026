@@ -3251,7 +3251,7 @@
     "src": "resources/assets/vendor/fonts/fontawesome/fa-v4compatibility.woff2"
   },
   "resources/assets/vendor/fonts/iconify/iconify.css": {
-    "file": "assets/iconify-BGH0gDU1.css",
+    "file": "assets/iconify-YNoVorgh.css",
     "src": "resources/assets/vendor/fonts/iconify/iconify.css",
     "isEntry": true
   },
@@ -3921,12 +3921,12 @@
     "isEntry": true
   },
   "resources/assets/vendor/libs/summernote/summernote-fonts.css": {
-    "file": "assets/summernote-fonts-9Rt6tbCz.css",
+    "file": "assets/summernote-fonts-B4My_5iD.css",
     "src": "resources/assets/vendor/libs/summernote/summernote-fonts.css",
     "isEntry": true
   },
   "resources/assets/vendor/libs/summernote/summernote.js": {
-    "file": "assets/summernote-D6FD5_tv.js",
+    "file": "assets/summernote-C9XhuikP.js",
     "name": "summernote",
     "src": "resources/assets/vendor/libs/summernote/summernote.js",
     "isEntry": true,
@@ -3934,7 +3934,7 @@
       "_jquery-BQXThELV.js"
     ],
     "css": [
-      "assets/summernote-Db0vQMex.css"
+      "assets/summernote-BCtKxd4C.css"
     ],
     "assets": [
       "assets/summernote-jt9apK1s.eot",

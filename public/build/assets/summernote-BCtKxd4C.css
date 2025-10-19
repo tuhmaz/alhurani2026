@@ -1,4 +1,4 @@
-@font-face{font-family:summernote;font-style:normal;font-weight:400;font-display:auto;src:url(../../../../node_modules/summernote/dist/font/summernote.eot?#iefix) format("embedded-opentype"),url(../../../../node_modules/summernote/dist/font/summernote.woff2) format("woff2"),url(../../../../node_modules/summernote/dist/font/summernote.woff) format("woff"),url(../../../../node_modules/summernote/dist/font/summernote.ttf) format("truetype")}/*!
+@font-face{font-family:summernote;font-style:normal;font-weight:400;font-display:auto;src:url(~summernote/dist/font/summernote.eot?#iefix) format("embedded-opentype"),url(~summernote/dist/font/summernote.woff2) format("woff2"),url(~summernote/dist/font/summernote.woff) format("woff"),url(~summernote/dist/font/summernote.ttf) format("truetype")}/*!
  * 
  * Super simple WYSIWYG editor v0.9.1
  * https://summernote.org

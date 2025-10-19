@@ -38,6 +38,11 @@ class Post extends Model
         'views' => 'integer'
     ];
 
+    /**
+     * الخصائص المضافة للنموذج
+     */
+    protected $appends = ['image_url'];
+
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
@@ -98,5 +103,34 @@ class Post extends Model
         return !empty($this->keywords_array)
             ? implode(',', $this->keywords_array)
             : '';
+    }
+
+    /**
+     * Accessor للحصول على رابط الصورة بشكل صحيح
+     *
+     * @return string
+     */
+    public function getImageUrlAttribute(): string
+    {
+        // التحقق من وجود قيمة في حقل image
+        if (!$this->image || trim($this->image) === '') {
+            return asset('assets/img/illustrations/default_news_image.jpg');
+        }
+
+        $image = trim($this->image);
+
+        // إذا كانت الصورة عبارة عن URL كامل (خارجي)
+        if (filter_var($image, FILTER_VALIDATE_URL)) {
+            return $image;
+        }
+
+        // إذا كانت الصورة هي الصورة الافتراضية
+        if ($image === 'posts/default_post_image.jpg') {
+            return asset('assets/img/illustrations/default_news_image.jpg');
+        }
+
+        // إرجاع مسار الصورة المحفوظة
+        // استخدام asset() مباشرة للتأكد من الرابط الصحيح
+        return asset('storage/' . $image);
     }
 }

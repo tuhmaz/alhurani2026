@@ -135,7 +135,7 @@
                        accept="image/*"
                        required>
                 <label class="input-group-text" for="image">
-                  <i class="post-icon ti tabler-photo-up"></i>
+                  <i class="post-icon ti ti-photo-up"></i>
                 </label>
               </div>
               <small class="text-muted">{{ __('Allowed formats: jpeg, png, jpg, gif, webp. Max size: 40MB') }}</small>

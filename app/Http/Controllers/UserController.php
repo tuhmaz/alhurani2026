@@ -59,15 +59,26 @@ class UserController extends Controller
             'role' => 'required'
         ]);
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
+        // استخدام Transaction لضمان تكامل البيانات
+        DB::beginTransaction();
 
-        $user->assignRole($request->role);
+        try {
+            $user = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+            ]);
 
-        return redirect()->route('dashboard.users.index')->with('success', 'User created successfully.');
+            $user->assignRole($request->role);
+
+            DB::commit();
+
+            return redirect()->route('dashboard.users.index')->with('success', 'User created successfully.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Error creating user: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Error creating user. Please try again.')->withInput();
+        }
     }
 
     public function edit(User $user)
@@ -91,28 +102,39 @@ class UserController extends Controller
             'permissions' => 'nullable|array'
         ]);
 
-        // تحديث الأدوار مع التأكد من guard_name
-        if ($request->has('roles')) {
-            $roles = Role::where('guard_name', 'sanctum')
-                        ->whereIn('name', $request->roles)
-                        ->get();
-            $user->syncRoles($roles);
-        } else {
-            $user->syncRoles([]);
-        }
+        // استخدام Transaction لضمان تكامل البيانات
+        DB::beginTransaction();
 
-        // تحديث الصلاحيات المباشرة مع التأكد من guard_name
-        if ($request->has('permissions')) {
-            $permissions = Permission::where('guard_name', 'sanctum')
-                                  ->whereIn('name', $request->permissions)
-                                  ->get();
-            $user->syncPermissions($permissions);
-        } else {
-            $user->syncPermissions([]);
-        }
+        try {
+            // تحديث الأدوار مع التأكد من guard_name
+            if ($request->has('roles')) {
+                $roles = Role::where('guard_name', 'sanctum')
+                            ->whereIn('name', $request->roles)
+                            ->get();
+                $user->syncRoles($roles);
+            } else {
+                $user->syncRoles([]);
+            }
 
-        return redirect()->route('dashboard.users.show', $user)
-            ->with('success', __('User roles and permissions updated successfully.'));
+            // تحديث الصلاحيات المباشرة مع التأكد من guard_name
+            if ($request->has('permissions')) {
+                $permissions = Permission::where('guard_name', 'sanctum')
+                                      ->whereIn('name', $request->permissions)
+                                      ->get();
+                $user->syncPermissions($permissions);
+            } else {
+                $user->syncPermissions([]);
+            }
+
+            DB::commit();
+
+            return redirect()->route('dashboard.users.show', $user)
+                ->with('success', __('User roles and permissions updated successfully.'));
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Error updating user roles/permissions: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Error updating roles and permissions. Please try again.');
+        }
     }
 
     public function update(Request $request, User $user)
@@ -265,6 +287,9 @@ class UserController extends Controller
 
     public function destroy(User $user)
     {
+        // استخدام Transaction لضمان تكامل البيانات
+        DB::beginTransaction();
+
         try {
             // Delete profile photo if exists
             if ($user->profile_photo_path) {
@@ -283,8 +308,11 @@ class UserController extends Controller
                 ->causedBy(auth()->user())
                 ->log("Deleted user '{$user->name}'");
 
+            DB::commit();
+
             return redirect()->route('dashboard.users.index')->with('success', 'User deleted successfully.');
         } catch (\Exception $e) {
+            DB::rollBack();
             Log::error('Error deleting user: ' . $e->getMessage());
             return redirect()->route('dashboard.users.index')->with('error', 'Error deleting user. Please try again.');
         }

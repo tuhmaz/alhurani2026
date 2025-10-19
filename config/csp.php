@@ -1,5 +1,15 @@
 <?php
 
+// السماح بـ localhost في بيئة التطوير أو عند استخدام localhost
+$localOrigins = (env('APP_ENV') === 'local' || strpos(env('APP_URL'), 'localhost') !== false || strpos(env('APP_URL'), '127.0.0.1') !== false)
+    ? [
+        'http://localhost',
+        'http://localhost:8000',
+        'http://127.0.0.1',
+        'http://127.0.0.1:8000',
+    ]
+    : [];
+
 return [
     'enabled' => true,
 
@@ -7,7 +17,7 @@ return [
     'directives' => [
         'default-src' => ["'self'"],
         'base-uri' => ["'self'"],
-        'img-src' => [
+        'img-src' => array_merge([
             "'self'",
             'data:',
             'https:',
@@ -15,7 +25,7 @@ return [
             'https://*.doubleclick.net',
             'https://*.g.doubleclick.net',
             'https://*.google.com',
-        ],
+        ], $localOrigins),
         'style-src' => ["'self'", 'https:', "'unsafe-inline'"],
         // Allow AdSense and related Google domains
         'script-src' => [

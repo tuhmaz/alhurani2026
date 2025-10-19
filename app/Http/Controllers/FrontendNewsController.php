@@ -37,10 +37,12 @@ class FrontendNewsController extends Controller
         ->orderBy('name')
         ->get();
 
-    $query = Post::on($database)->with('category');
+    $query = Post::on($database)
+        ->with('category')
+        ->where('is_active', true); // عرض البوستات النشطة فقط
 
     // Total across all posts (not affected by current filters)
-    $totalPosts = Post::on($database)->count();
+    $totalPosts = Post::on($database)->where('is_active', true)->count();
 
     // فلترة حسب الفئة (category) إذا وُجدت
     if ($request->has('category') && !empty($request->input('category'))) {
@@ -59,11 +61,13 @@ class FrontendNewsController extends Controller
         // يمكنك اختيار أي أعمدة للبحث فيها، العنوان أو الوصف
         $query->where(function($q) use ($keyword) {
             $q->where('title', 'like', '%' . $keyword . '%')
-              ->orWhere('description', 'like', '%' . $keyword . '%');
+              ->orWhere('content', 'like', '%' . $keyword . '%')
+              ->orWhere('meta_description', 'like', '%' . $keyword . '%');
         });
     }
 
-    $posts = $query->paginate(10);
+    // ترتيب البوستات: الأحدث أولاً
+    $posts = $query->orderBy('created_at', 'desc')->paginate(12);
 
     return view('content.frontend.news.index', compact('posts', 'categories', 'database', 'totalPosts'));
 }
@@ -181,7 +185,9 @@ class FrontendNewsController extends Controller
         // Renamed from $news to $posts to align with posts naming
         $posts = Post::on($connection)
             ->where('category_id', $resolvedCategory->id)
-            ->paginate(10);
+            ->where('is_active', true)
+            ->orderBy('created_at', 'desc')
+            ->paginate(12);
 
         // Fetch direct subcategories of this category for hierarchical navigation
         $children = Category::on($connection)
@@ -213,7 +219,9 @@ class FrontendNewsController extends Controller
 
         $news = Post::on($connection)
             ->where('category_id', $category->id)
-            ->paginate(10);
+            ->where('is_active', true)
+            ->orderBy('created_at', 'desc')
+            ->paginate(12);
 
         if ($news->isEmpty()) {
             return response()->json(['message' => 'No posts found for the selected category'], 404);

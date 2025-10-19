@@ -47,6 +47,7 @@ return [
     |
     */
 
+    // في Production، يُنصح بتفعيل التشفير لحماية بيانات الجلسة
     'encrypt' => env('SESSION_ENCRYPT', false),
 
     /*
@@ -169,7 +170,8 @@ return [
     |
     */
 
-    'secure' => env('SESSION_SECURE_COOKIE'),
+    // في Production مع HTTPS، يجب تفعيل هذا الخيار لحماية الكوكيز
+    'secure' => env('SESSION_SECURE_COOKIE', env('APP_ENV') === 'production'),
 
     /*
     |--------------------------------------------------------------------------
