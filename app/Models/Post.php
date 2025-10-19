@@ -129,8 +129,8 @@ class Post extends Model
             return asset('assets/img/illustrations/default_news_image.jpg');
         }
 
-        // إرجاع مسار الصورة المحفوظة
-        // استخدام asset() مباشرة للتأكد من الرابط الصحيح
-        return asset('storage/' . $image);
+        // إرجاع مسار الصورة المحفوظة باستخدام Storage::url()
+        // Storage::url() يقوم تلقائياً بإضافة /storage/ إلى المسار
+        return \Illuminate\Support\Facades\Storage::url($image);
     }
 }
