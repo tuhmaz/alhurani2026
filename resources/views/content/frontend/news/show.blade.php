@@ -249,8 +249,8 @@
                   @if($author)
                     <div class="d-flex align-items-center">
                       <div class="avatar avatar-sm me-2">
-                        @if($author->avatar || $author->profile_photo_path)
-                          <img src="{{ $author->avatar ?? $author->profile_photo_path }}" alt="{{ $author->name }}" class="rounded-circle">
+                        @if($author->profile_photo_url)
+                          <img src="{{ $author->profile_photo_url }}" alt="{{ $author->name }}" class="rounded-circle">
                         @else
                           <span class="avatar-initial rounded-circle bg-primary">
                             {{ substr($author->name, 0, 1) }}
@@ -569,8 +569,8 @@
           <div class="card shadow-sm border-0 mb-4">
             <div class="card-body p-4 text-center">
               <div class="avatar avatar-xl mb-3 mx-auto">
-                @if($author->avatar || $author->profile_photo_path)
-                  <img src="{{ $author->avatar ?? $author->profile_photo_path }}"
+                @if($author->profile_photo_url)
+                  <img src="{{ $author->profile_photo_url }}"
                        alt="{{ $author->name }}"
                        class="rounded-circle">
                 @else
