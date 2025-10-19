@@ -128,20 +128,30 @@ class GradeOneController extends Controller
       try { DB::connection('jo')->enableQueryLog(); } catch (\Throwable $e) {}
     }
 
-    // Eager-load all relations used by the Blade to prevent N+1 queries
-    $article = Article::on($database)
-      ->with([
-        'subject.schoolClass',
-        'semester',
-        'schoolClass',
-        'keywords',
-        'files',
-      ])
-      // Load only latest 10 comments, keep relation-defined eager loads, plus user roles
-      ->with(['comments' => function ($q) {
-        $q->latest()->limit(10)->with(['user.roles']);
-      }])
-      ->findOrFail($id);
+    // Use caching to reduce database load for frequently accessed articles
+    $articleCacheKey = sprintf('article_full_%s_%d', $database, $id);
+
+    $article = Cache::remember($articleCacheKey, now()->addMinutes(30), function () use ($database, $id) {
+      // Eager-load all relations used by the Blade to prevent N+1 queries
+      return Article::on($database)
+        ->with([
+          'subject.schoolClass',
+          'semester',
+          'schoolClass',
+          'keywords',
+          'files',
+        ])
+        // Load only latest 10 comments with optimized eager loading
+        ->with(['comments' => function ($q) use ($database) {
+          $q->latest()
+            ->limit(10)
+            ->select(['id', 'commentable_id', 'commentable_type', 'user_id', 'body', 'database', 'created_at', 'updated_at'])
+            ->with(['user' => function ($userQuery) {
+              $userQuery->select(['id', 'name', 'avatar', 'profile_photo_path']);
+            }]);
+        }])
+        ->findOrFail($id);
+    });
 
     // Use the eager-loaded files relation
     $file = $article->files->first();

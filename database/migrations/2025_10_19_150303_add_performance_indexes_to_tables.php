@@ -64,6 +64,36 @@ return new class extends Migration
                     });
                 }
 
+                // جدول posts - تحسين استعلامات البحث والعرض
+                if (Schema::connection($connection)->hasTable('posts')) {
+                    Schema::connection($connection)->table('posts', function (Blueprint $table) {
+                        // index على is_active للبحث عن البوستات النشطة
+                        if (!$this->indexExists($table->getTable(), 'posts_is_active_index', $table->getConnection()->getName())) {
+                            $table->index('is_active', 'posts_is_active_index');
+                        }
+
+                        // index على created_at للترتيب (الأحدث أولاً)
+                        if (!$this->indexExists($table->getTable(), 'posts_created_at_index', $table->getConnection()->getName())) {
+                            $table->index('created_at', 'posts_created_at_index');
+                        }
+
+                        // index على category_id للبحث حسب الفئة
+                        if (!$this->indexExists($table->getTable(), 'posts_category_id_index', $table->getConnection()->getName())) {
+                            $table->index('category_id', 'posts_category_id_index');
+                        }
+
+                        // composite index للاستعلامات الشائعة (is_active + created_at)
+                        if (!$this->indexExists($table->getTable(), 'posts_active_created_index', $table->getConnection()->getName())) {
+                            $table->index(['is_active', 'created_at'], 'posts_active_created_index');
+                        }
+
+                        // composite index (category_id + is_active + created_at)
+                        if (!$this->indexExists($table->getTable(), 'posts_category_active_created_index', $table->getConnection()->getName())) {
+                            $table->index(['category_id', 'is_active', 'created_at'], 'posts_category_active_created_index');
+                        }
+                    });
+                }
+
                 // جدول activity_log - تحسين استعلامات السجلات
                 if (Schema::connection($connection)->hasTable('activity_log')) {
                     Schema::connection($connection)->table('activity_log', function (Blueprint $table) {
@@ -125,6 +155,17 @@ return new class extends Migration
                         $table->dropIndex('articles_status_index');
                         $table->dropIndex('articles_created_at_index');
                         $table->dropIndex('articles_grade_subject_semester_index');
+                    });
+                }
+
+                // حذف indexes من posts
+                if (Schema::connection($connection)->hasTable('posts')) {
+                    Schema::connection($connection)->table('posts', function (Blueprint $table) {
+                        $table->dropIndex('posts_is_active_index');
+                        $table->dropIndex('posts_created_at_index');
+                        $table->dropIndex('posts_category_id_index');
+                        $table->dropIndex('posts_active_created_index');
+                        $table->dropIndex('posts_category_active_created_index');
                     });
                 }
 
