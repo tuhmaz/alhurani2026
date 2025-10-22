@@ -31,12 +31,8 @@ $icons = [
 @vite([
     'resources/assets/vendor/scss/but.scss',
     'resources/assets/vendor/scss/calendar.scss',
-    'resources/assets/vendor/libs/flatpickr/flatpickr.scss',
-    'resources/css/banner-professional.css',
-     
+    'resources/assets/vendor/libs/flatpickr/flatpickr.scss'
 ])
-<!-- Professional Banner CSS -->
-
 <style>
   /* Normalize buttons height to prevent text/font swap reflows */
   .bubbly-button { min-height: 56px; }
@@ -70,11 +66,10 @@ $icons = [
     'resources/assets/vendor/js/filterhome.js',
     'resources/assets/vendor/js/but.js',
     'resources/assets/vendor/libs/flatpickr/flatpickr.js',
+
     'resources/assets/vendor/js/appCalender.js',
-    'resources/js/banner-professional.js',
+
 ])
-<!-- Professional Banner JavaScript -->
- 
 @endsection
 
 @section('content')
@@ -147,7 +142,7 @@ $icons = [
   <div class="school-classes container py-5">
     <div class="card">
       <div class="card-body">
-
+        
         <div class="row">
           <div class="col-md-7 mb-4">
             <div class="row classes-grid">
@@ -172,11 +167,7 @@ $icons = [
               @endforelse
             </div>
 
-            <!-- Professional Banner -->
-            <div class="mt-4">
-                @include('components.banner-professional')
-            </div>
-
+            
           </div>
           <div class="col-md-5 mb-4">
 

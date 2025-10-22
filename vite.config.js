@@ -75,7 +75,10 @@ export default defineConfig({
         'resources/assets/js/articles/articles-management.js',
         'resources/assets/js/articles/article-details.js',
         'resources/assets/js/chat/chat.js',
-		'resources/assets/js/notifications/bell.js',
+		    'resources/assets/js/notifications/bell.js',
+        'resources/js/banner-professional.js',
+        'resources/css/banner-professional.css',
+
 
         ...pageJsFiles,
         ...vendorJsFiles,

@@ -3251,7 +3251,7 @@
     "src": "resources/assets/vendor/fonts/fontawesome/fa-v4compatibility.woff2"
   },
   "resources/assets/vendor/fonts/iconify/iconify.css": {
-    "file": "assets/iconify-CmkggQPn.css",
+    "file": "assets/iconify-Dqoq71VW.css",
     "src": "resources/assets/vendor/fonts/iconify/iconify.css",
     "isEntry": true
   },
@@ -4168,6 +4168,11 @@
     "src": "resources/css/app.css",
     "isEntry": true
   },
+  "resources/css/banner-professional.css": {
+    "file": "assets/banner-professional-Dvrzc_Pb.css",
+    "src": "resources/css/banner-professional.css",
+    "isEntry": true
+  },
   "resources/css/cookie-consent.css": {
     "file": "assets/cookie-consent-DzL6nr-0.css",
     "src": "resources/css/cookie-consent.css",
@@ -4215,6 +4220,12 @@
     "file": "assets/articles-BzJqtZgm.js",
     "name": "articles",
     "src": "resources/js/articles.js",
+    "isEntry": true
+  },
+  "resources/js/banner-professional.js": {
+    "file": "assets/banner-professional-CzmhYBU5.js",
+    "name": "banner-professional",
+    "src": "resources/js/banner-professional.js",
     "isEntry": true
   },
   "resources/js/laravel-user-management.js": {
