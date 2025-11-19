@@ -57,10 +57,10 @@ class BannedIp extends Model
     // حظر آيبي
     public static function ban($ip, $reason = null, $days = 30, $adminId = null)
     {
-        // تحديد من قام بالحظر (Admin ID أو System = 0)
-        // 0 يمثل الحظر التلقائي من النظام (Auto-ban)
-        // هذا يضمن وجود Audit Trail دائماً
-        $bannedBy = $adminId ?: (Auth::check() ? Auth::id() : 0);
+        // تحديد من قام بالحظر (Admin ID أو System = null)
+        // null يمثل الحظر التلقائي من النظام (Auto-ban)
+        // هذا يضمن وجود Audit Trail دائماً ويتوافق مع foreign key constraint
+        $bannedBy = $adminId ?: (Auth::check() ? Auth::id() : null);
 
         return static::create([
             'ip' => $ip,
@@ -98,7 +98,7 @@ class BannedIp extends Model
      */
     public function isSystemBan()
     {
-        return $this->banned_by === 0;
+        return $this->banned_by === null;
     }
 
     /**
@@ -109,7 +109,7 @@ class BannedIp extends Model
      */
     public function getBannedByNameAttribute()
     {
-        if ($this->banned_by === 0) {
+        if ($this->banned_by === null) {
             return 'النظام (Auto-ban)';
         }
 

@@ -139,7 +139,8 @@ class SecurityScanMiddleware
             // Require the SQL keyword to be a standalone token, not part of a larger word (e.g., "selected_notifications")
             '/[\'";]\s*(?<![a-z_])(union|select|insert|update|drop|truncate|alter|exec(?:ute)?|sp_|xp_)\b/i',
 
-            '/--\s+/',
+            // تحسين: فحص SQL comment فقط في بداية السطر أو بعد استعلام SQL
+            '/(?:^|\b(?:select|update|insert|delete|drop|alter|union)\b.*?)--\s+/i',
             '/;\s*$/',
             '/\/\*.*\*\//',
             '/@@(version|servername|hostname)/i',

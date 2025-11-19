@@ -6,13 +6,16 @@ use Illuminate\Support\Facades\Artisan;
 
 use Illuminate\Http\Request;
 use App\Models\Setting;
+use App\Support\AdSnippetSanitizer;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 use App\Services\SmtpTestService;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
+use Illuminate\Validation\ValidationException;
 
 
 class SettingsController extends Controller
@@ -191,8 +194,29 @@ class SettingsController extends Controller
                 }
             }
 
+            $adsenseClient = $data['adsense_client'] ?? Setting::get('adsense_client', config('settings.adsense_client'));
+
             // Update all other settings
             foreach ($data as $key => $value) {
+                if (is_string($key) && str_starts_with($key, 'google_ads_')) {
+                    // Skip validation if the snippet is empty (allow clearing ads)
+                    if (!empty(trim((string) $value))) {
+                        try {
+                            $value = AdSnippetSanitizer::sanitize($value, $adsenseClient, $key);
+                            $data[$key] = $value;
+                        } catch (ValidationException $e) {
+                            Log::warning('Ad snippet validation failed', [
+                                'setting_key' => $key,
+                                'trimmed_snippet' => Str::limit(trim((string) $value), 120),
+                            ]);
+                            throw $e;
+                        }
+                    } else {
+                        // Allow empty value (for clearing ad slots)
+                        $data[$key] = '';
+                    }
+                }
+
                 // Update database setting
                 Setting::set($key, $value);
 
@@ -282,6 +306,16 @@ class SettingsController extends Controller
             }
             return redirect()->back()->with('success', __('تم تحديث الإعدادات بنجاح'));
 
+        } catch (ValidationException $e) {
+            if ($isAjax) {
+                return response()->json([
+                    'success' => false,
+                    'message' => __('فشل التحقق من صحة بيانات الإعلان'),
+                    'errors' => $e->errors(),
+                ], 422);
+            }
+
+            return redirect()->back()->withErrors($e->errors())->withInput();
         } catch (\Exception $e) {
             Log::error('Settings update error: ' . $e->getMessage());
 

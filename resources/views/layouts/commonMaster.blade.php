@@ -259,25 +259,22 @@
     </style>
   @endif
 
-  <!-- AdSense layout helpers -->
+  <!-- AdSense layout helpers - Compliant with Google AdSense policies -->
   <style id="adsense-style">
     .adsense-banner {
-      margin: 2rem auto;
+      margin: 1.5rem auto;
       text-align: center;
+      max-width: 100%;
+      overflow: hidden;
     }
 
-    .adsense-banner__label {
-      display: block;
-      font-size: 0.75rem;
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: #6b7280;
-      margin-bottom: 0.5rem;
-    }
+    /* Label styles removed to comply with AdSense policies */
+    /* No text, arrows, or indicators should point to ads */
 
     .adsense-banner__slot {
       min-height: 120px;
+      display: block;
+      width: 100%;
     }
 
     @media (max-width: 767.98px) {

@@ -26,38 +26,20 @@ function initBannerInteractions() {
         }
     });
 
-    // Add hover effect enhancements
+    // Hover effects removed to comply with AdSense policies
+    // Excessive animations near ads can cause policy violations
+
+    /* Feature cards hover effects - removed
     const featureCards = document.querySelectorAll('.banner-feature-card');
-    featureCards.forEach(card => {
-        card.addEventListener('mouseenter', function() {
-            this.style.transform = 'translateY(-5px)';
-        });
-        card.addEventListener('mouseleave', function() {
-            this.style.transform = 'translateY(0)';
-        });
-    });
+    */
 
-    // Add RTL badge interactions
+    /* RTL badge interactions - removed
     const rtlBadge = document.querySelector('.banner-rtl-badge');
-    if (rtlBadge) {
-        rtlBadge.addEventListener('mouseenter', function() {
-            this.style.transform = 'translateY(-5px) rotate(3deg)';
-        });
-        rtlBadge.addEventListener('mouseleave', function() {
-            this.style.transform = 'translateY(0) rotate(0deg)';
-        });
-    }
+    */
 
-    // Add CTA button pulse effect on hover
+    /* CTA button pulse effect - removed
     const ctaButton = document.querySelector('.banner-cta-button');
-    if (ctaButton) {
-        ctaButton.addEventListener('mouseenter', function() {
-            this.style.animation = 'pulse 0.5s ease';
-        });
-        ctaButton.addEventListener('animationend', function() {
-            this.style.animation = '';
-        });
-    }
+    */
 
     // Add analytics tracking if needed
     trackBannerView();
@@ -94,19 +76,6 @@ function trackBannerClick() {
     }
 }
 
-// Add pulse animation to CSS dynamically if not exists
-if (!document.querySelector('#banner-animations')) {
-    const style = document.createElement('style');
-    style.id = 'banner-animations';
-    style.textContent = `
-        @keyframes pulse {
-            0%, 100% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(1.05);
-            }
-        }
-    `;
-    document.head.appendChild(style);
-}
+// Pulse animation removed to comply with AdSense policies
+// Dynamic animations near ads can cause violations
+/* Pulse animation code removed */
