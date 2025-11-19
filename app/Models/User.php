@@ -137,7 +137,6 @@ class User extends Authenticatable implements MustVerifyEmail
         'name',
         'email',
         'password',
-        'api_token',
         'phone',
         'job_title',
         'gender',
@@ -147,10 +146,20 @@ class User extends Authenticatable implements MustVerifyEmail
         'profile_photo_path',
         'avatar', // للتوافق مع الإصدارات السابقة
         'google_id',
-        'status',
-        'last_activity',
         'current_team_id',
-        'last_seen'
+    ];
+
+    /**
+     * الحقول المحمية من Mass Assignment
+     * هذه الحقول لا يمكن تعبئتها بشكل جماعي لأسباب أمنية
+     *
+     * @var array<int, string>
+     */
+    protected $guarded = [
+        'api_token',      // API Token - يجب أن يُدار من خلال Sanctum فقط
+        'status',         // حالة المستخدم - يجب أن يُدار من قبل الإداريين فقط
+        'last_activity',  // آخر نشاط - يُحدّث تلقائياً
+        'last_seen',      // آخر ظهور - يُحدّث تلقائياً
     ];
 
     /**

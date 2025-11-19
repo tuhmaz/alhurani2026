@@ -7,6 +7,11 @@ use Illuminate\Support\Facades\Auth;
 
 class SecurityLog extends Model
 {
+    /**
+     * الحقول التي يمكن تعبئتها جماعياً (فقط للبيانات الأساسية)
+     *
+     * @var array<int, string>
+     */
     protected $fillable = [
         'ip_address',
         'event_type',
@@ -15,18 +20,27 @@ class SecurityLog extends Model
         'route',
         'method',
         'request_data',
-        'risk_score',
+        'user_id',
         'country_code',
         'city',
         'attack_type',
-        'is_blocked',
-        'is_trusted',
-        'user_id',
-        'is_resolved',
-        'resolved_at',
-        'resolution_notes',
-        'severity',
-        'occurrence_count',
+    ];
+
+    /**
+     * الحقول المحمية من Mass Assignment لأسباب أمنية
+     * هذه الحقول حساسة جداً ولا يجب تعديلها إلا من خلال الكود الداخلي
+     *
+     * @var array<int, string>
+     */
+    protected $guarded = [
+        'risk_score',         // درجة الخطورة - تُحسب تلقائياً
+        'is_blocked',         // حالة الحظر - يُحدد من النظام فقط
+        'is_trusted',         // حالة الثقة - يُحدد من الإداريين فقط
+        'is_resolved',        // حالة الحل - يُحدد من الإداريين فقط
+        'resolved_at',        // وقت الحل - يُحدث تلقائياً
+        'resolution_notes',   // ملاحظات الحل - تتطلب صلاحيات
+        'severity',           // مستوى الخطورة - يُحسب تلقائياً
+        'occurrence_count',   // عدد التكرار - يُحدّث تلقائياً
     ];
 
     protected $casts = [

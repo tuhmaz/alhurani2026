@@ -12,8 +12,16 @@ class BannedIp extends Model
     protected $fillable = [
         'ip',
         'reason',
-        'banned_by',      // أصبح الآن user_id
         'banned_until'
+    ];
+
+    /**
+     * الحقول المحمية من Mass Assignment لأسباب أمنية
+     *
+     * @var array<int, string>
+     */
+    protected $guarded = [
+        'banned_by',  // من قام بالحظر - يُحدد من المستخدم الحالي أو النظام فقط
     ];
 
     protected $casts = [

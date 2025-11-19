@@ -23,13 +23,21 @@ class Post extends Model
         'content',
         'image',
         'alt',
-        'is_active',
-        'is_featured',
-        'views',
         'country',
         'keywords',
-        'meta_description',
-        'author_id'
+        'meta_description'
+    ];
+
+    /**
+     * الحقول المحمية من Mass Assignment لأسباب أمنية
+     *
+     * @var array<int, string>
+     */
+    protected $guarded = [
+        'author_id',    // المؤلف - يُحدد من المستخدم الحالي فقط
+        'is_active',    // حالة التفعيل - يتطلب صلاحيات خاصة
+        'is_featured',  // منشور مميز - يتطلب صلاحيات خاصة
+        'views',        // عدد المشاهدات - يُحدّث تلقائياً فقط
     ];
 
     protected $casts = [

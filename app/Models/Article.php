@@ -23,11 +23,19 @@ class Article extends Model
         'subject_id',
         'semester_id',
         'meta_description',
-        'author_id',
-        'status',
         'keywords',
-        'views_count',
         'published_at'
+    ];
+
+    /**
+     * الحقول المحمية من Mass Assignment لأسباب أمنية
+     *
+     * @var array<int, string>
+     */
+    protected $guarded = [
+        'author_id',    // المؤلف - يُحدد من المستخدم الحالي فقط
+        'status',       // حالة النشر - يتطلب صلاحيات خاصة
+        'views_count',  // عدد المشاهدات - يُحدّث تلقائياً فقط
     ];
 
     protected $casts = [

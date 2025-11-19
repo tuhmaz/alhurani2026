@@ -13,7 +13,15 @@ class TrustedIp extends Model
         'ip_address',
         'reason',
         'added_at',
-        'added_by',
+    ];
+
+    /**
+     * الحقول المحمية من Mass Assignment لأسباب أمنية
+     *
+     * @var array<int, string>
+     */
+    protected $guarded = [
+        'added_by',  // من قام بالإضافة - يُحدد من المستخدم الحالي فقط
     ];
 
     protected $casts = [
