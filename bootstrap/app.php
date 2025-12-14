@@ -13,6 +13,7 @@ use App\Http\Middleware\CachePublicResponse;
 use App\Http\Middleware\SecurityScanMiddleware;
 use App\Http\Middleware\StripContentEncodingHeader;
 use App\Http\Middleware\SecurityHeaders;
+use App\Http\Middleware\ApiRateLimiter;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -24,6 +25,11 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
         // Global middlewares
         $middleware->use([\Illuminate\Http\Middleware\HandleCors::class]);
+        // API middlewares
+        $middleware->api([
+            ApiRateLimiter::class,
+            SecurityHeaders::class,
+        ]);
         // Web middlewares
         $middleware->web([
             LocaleMiddleware::class,

@@ -64,7 +64,10 @@ class AppServiceProvider extends ServiceProvider
             Paginator::useBootstrapFive();
             // Load dynamic settings from database and merge into config
             if (Schema::hasTable('settings')) {
-                $dbSettings = Setting::pluck('value','key')->toArray();
+                // Cache settings for 1 hour to reduce database queries
+                $dbSettings = \Illuminate\Support\Facades\Cache::remember('app_settings', 3600, function () {
+                    return Setting::pluck('value','key')->toArray();
+                });
                 Config::set('settings', array_merge(config('settings', []), $dbSettings));
                 // Set application locale from session or settings
                 $locale = session('locale') ?? config('settings.site_language');
