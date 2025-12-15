@@ -198,7 +198,7 @@ class ArticleApiController extends Controller
 
         $article = null;
 
-        DB::connection($connection)->transaction(function () use ($request, $validated, $country, $connection, &$article) {
+        DB::connection($connection)->transaction(function () use ($request, $validated, $countryParam, $connection, &$article) {
 
             $metaDescription = $request->meta_description;
 
@@ -477,6 +477,25 @@ class ArticleApiController extends Controller
                 ]);
             } catch (\Exception $e) {
                 Log::error('فشل في تحديث الملف المرفق: ' . $e->getMessage());
+            }
+        } else {
+            // تحديث بيانات الملف الموجود (الفئة والاسم) إذا لم يتم رفع ملف جديد
+            $currentFile = $article->files->first();
+            if ($currentFile) {
+                $shouldSave = false;
+                if ($request->filled('file_category') && $request->file_category !== $currentFile->file_category) {
+                    $currentFile->file_category = $request->file_category;
+                    $shouldSave = true;
+                }
+                // تحديث اسم الملف فقط إذا تم إرساله
+                if ($request->filled('file_name') && $request->file_name !== $currentFile->file_name) {
+                    $currentFile->file_name = $request->file_name;
+                    $shouldSave = true;
+                }
+                
+                if ($shouldSave) {
+                    $currentFile->save();
+                }
             }
         }
 

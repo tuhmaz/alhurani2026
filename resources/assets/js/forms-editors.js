@@ -74,6 +74,22 @@ $(document).ready(function () {
 function addCustomStyles() {
   const styles = `
     <style>
+      /* RTL Support for Summernote */
+      .note-editor, .note-editor .note-editing-area, .note-editor .note-editable {
+        direction: rtl !important;
+        text-align: right !important;
+        font-family: 'Cairo', 'Tajawal', 'Almarai', sans-serif;
+      }
+      .note-toolbar {
+        direction: rtl !important;
+      }
+      .note-btn-group {
+        direction: ltr; /* Keep buttons LTR inside groups for correct borders/icons */
+      }
+      .dropdown-menu {
+        text-align: right;
+      }
+      
       .file-attachment {
         display: inline-flex;
         align-items: center;
