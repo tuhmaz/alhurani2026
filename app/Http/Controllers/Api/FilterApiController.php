@@ -139,6 +139,7 @@ class FilterApiController extends Controller
             ->get();
 
         return new BaseResource([
+            'subject' => $subject,
             'semesters' => $semesters
         ]);
     }
@@ -155,7 +156,9 @@ class FilterApiController extends Controller
                 $q->where('id', $semesterId);
             })
             ->distinct()
-            ->pluck('file_type');
+            ->pluck('file_category');
+            
+        // dd($fileTypes);
 
         return new BaseResource([
             'file_types' => $fileTypes

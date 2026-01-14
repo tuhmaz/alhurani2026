@@ -95,6 +95,11 @@ class SecurityLog extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function resolvedByUser()
+    {
+        return $this->belongsTo(User::class, 'resolved_by');
+    }
+
     // Backwards-compatible: keep method name but use severity column
     public function scopeOfLevel($query, $level)
     {

@@ -12,9 +12,16 @@ class UpdateUserLastActivity
 {
     public function handle(Request $request, Closure $next)
     {
-        if (Auth::check()) {
+        $user = Auth::user();
+        
+        if (!$user && $request->bearerToken()) {
+            try {
+                $user = Auth::guard('sanctum')->user();
+            } catch (\Throwable $e) {}
+        }
+
+        if ($user) {
             /** @var \App\Models\User $user */
-            $user = Auth::user();
             $minutes = (int) Config::get('monitoring.user_last_activity_minutes', 5);
             $key = 'ua:last_activity:' . $user->id;
 

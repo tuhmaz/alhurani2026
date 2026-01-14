@@ -44,8 +44,13 @@ class VisitorTrackingMiddleware
                         return;
                     }
 
+                    if ($request->isMethod('OPTIONS') || $request->isMethod('HEAD')) {
+                        return;
+                    }
+
                     $ip = $request->ip() ?? '127.0.0.1';
                     $userAgent = $request->header('User-Agent', 'Unknown');
+                    $referer = $request->header('Referer', null);
 
                     // Debounce DB writes per IP
                     $debounceSeconds = (int) Config::get('monitoring.visitor_write_debounce_seconds', 60);
@@ -72,12 +77,22 @@ class VisitorTrackingMiddleware
                     $browser = $analysis['isBot'] ? ($analysis['botInfo']['name'] ?? 'Bot') : ($analysis['client']['name'] ?? 'Unknown');
                     $os = $analysis['isBot'] ? 'Bot/Spider' : ($analysis['os']['name'] ?? 'Unknown');
 
+                    // Try to get authenticated user
+                    $user = Auth::user();
+                    if (!$user && $request->bearerToken()) {
+                        try {
+                            $user = Auth::guard('sanctum')->user();
+                        } catch (\Throwable $e) {}
+                    }
+                    $userId = $user ? $user->id : null;
+
                     if ($canWrite) {
                         VisitorTracking::updateOrCreate(
-                            [ 'ip_address' => $ip, 'user_id' => Auth::id(), ],
+                            [ 'ip_address' => $ip, 'user_id' => $userId, ],
                             [
                                 'user_agent'    => $userAgent,
                                 'url'           => $request->fullUrl(),
+                                'referer'       => $referer,
                                 'country'       => $geoData['country'] ?? null,
                                 'city'          => $geoData['city'] ?? null,
                                 'browser'       => $browser,
@@ -95,11 +110,11 @@ class VisitorTrackingMiddleware
                     }
 
                     try {
-                        $sessionId = method_exists($request, 'session') && $request->session() ? $request->session()->getId() : null;
+                        $sessionId = $request->hasSession() ? $request->session()->getId() : null;
                         $vsKey = 'vs:log:' . ($sessionId ?: $ip);
                         $vsDebounce = (int) Config::get('monitoring.visitor_session_log_debounce', 30);
                         if (Cache::add($vsKey, 1, $vsDebounce)) {
-                            VisitorSession::log($request, Auth::user());
+                            VisitorSession::log($request, $user);
                         }
                     } catch (\Throwable $e) {
                         Log::warning('VisitorSession log failed: ' . $e->getMessage());
@@ -195,7 +210,7 @@ class VisitorTrackingMiddleware
 
             // تحديث/إنشاء جلسة الزائر النشطة مع debounce
             try {
-                $sessionId = method_exists($request, 'session') && $request->session() ? $request->session()->getId() : null;
+                $sessionId = $request->hasSession() ? $request->session()->getId() : null;
                 $vsKey = 'vs:log:' . ($sessionId ?: $ip);
                 $vsDebounce = (int) Config::get('monitoring.visitor_session_log_debounce', 30);
                 if (Cache::add($vsKey, 1, $vsDebounce)) {

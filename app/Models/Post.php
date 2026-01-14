@@ -120,7 +120,7 @@ class Post extends Model
         $image = trim($this->image);
 
         // إذا كانت الصورة عبارة عن URL كامل (خارجي)
-        if (filter_var($image, FILTER_VALIDATE_URL)) {
+        if (filter_var($image, FILTER_VALIDATE_URL) || str_starts_with($image, 'http://') || str_starts_with($image, 'https://')) {
             return $image;
         }
 

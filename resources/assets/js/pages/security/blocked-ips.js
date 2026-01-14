@@ -117,7 +117,7 @@ document.addEventListener('DOMContentLoaded', function() {
 // View IP Details
 function viewIpDetails(ipAddress) {
     $.ajax({
-        url: `/security/ip/${ipAddress}/details`,
+        url: `/dashboard/security/ip-details/${encodeURIComponent(ipAddress)}`,
         method: 'GET',
         success: function(response) {
             $('#ipDetailsModal .modal-body').html(response);
@@ -151,13 +151,19 @@ function unblockIp(ipAddress) {
     }).then(function(result) {
         if (result.isConfirmed) {
             $.ajax({
-                url: `/security/ip/${ipAddress}/unblock`,
+                url: '/dashboard/security/unblock-ip',
                 method: 'POST',
                 data: {
+                    ip_address: ipAddress,
                     _token: $('meta[name="csrf-token"]').attr('content')
                 },
                 success: function(response) {
-                    $('.datatables-blocked-ips').DataTable().ajax.reload();
+                    const dataTable = $('.datatables-blocked-ips').DataTable();
+                    if (dataTable.ajax && typeof dataTable.ajax.reload === 'function') {
+                        dataTable.ajax.reload();
+                    } else {
+                        window.location.reload();
+                    }
                     Swal.fire({
                         icon: 'success',
                         title: window.translations.success || 'Success',

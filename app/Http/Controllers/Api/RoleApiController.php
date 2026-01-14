@@ -18,7 +18,7 @@ class RoleApiController extends Controller
      */
     public function index()
     {
-        $roles = Role::withCount('users')->get();
+        $roles = Role::with('permissions')->withCount('users')->get();
 
         return RoleResource::collection($roles)
             ->additional(['success' => true]);

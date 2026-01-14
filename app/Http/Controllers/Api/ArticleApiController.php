@@ -10,6 +10,8 @@ use App\Models\SchoolClass;
 use App\Models\File;
 use App\Models\User;
 use App\Models\Keyword;
+use App\Models\Comment;
+use Illuminate\Support\Facades\Cache;
 use App\Notifications\ArticleNotification;
 use App\Services\SecureFileUploadService;
 use App\Services\OneSignalService;
@@ -49,6 +51,7 @@ class ArticleApiController extends Controller
             'show',
             'indexByClass',
             'indexByKeyword',
+            'download'
         ]);
     }
 
@@ -119,6 +122,27 @@ class ArticleApiController extends Controller
 
         if ($semesterId = $request->input('semester_id')) {
             $query->where('semester_id', $semesterId);
+        }
+
+        if ($classId = $request->input('class_id')) {
+             // Assuming grade_level is the foreign key for SchoolClass in Article model, 
+             // OR there is a school_class_id column. 
+             // Looking at Article model, it has 'grade_level' in fillable.
+             // But ArticleResource likely maps it.
+             // Let's check Article model relationships again.
+             // Article model says: public function schoolClass() { ... }
+             // I'll assume the column is 'grade_level' based on fillable, 
+             // but usually it's school_class_id.
+             // Let's check Article model relationship definition.
+             $query->whereHas('schoolClass', function($q) use ($classId) {
+                 $q->where('id', $classId);
+             });
+        }
+
+        if ($category = $request->input('file_category')) {
+            $query->whereHas('files', function ($q) use ($category) {
+                $q->where('file_category', $category);
+            });
         }
 
         if (!is_null($request->input('status'))) {
@@ -308,25 +332,108 @@ class ArticleApiController extends Controller
      */
     public function show(Request $request, $id)
     {
-        $countryParam = $request->input('database', $request->input('country_id', $request->input('country', '1')));
-        $connection   = $this->getConnection($countryParam);
+        try {
+            $countryParam = $request->input('database', $request->input('country_id', $request->input('country', '1')));
+            $database     = $this->getConnection($countryParam);
 
-        $article = Article::on($connection)
-            ->with(['files', 'subject', 'semester', 'schoolClass', 'keywords'])
-            ->findOrFail($id);
+            // Use caching to reduce database load
+            $articleCacheKey = sprintf('article_full_%s_%d', $database, $id);
 
-        $article->increment('visit_count');
+            $article = Cache::remember($articleCacheKey, now()->addMinutes(30), function () use ($database, $id) {
+                return Article::on($database)
+                    ->with([
+                        'files',
+                        'subject.schoolClass',
+                        'semester',
+                        'schoolClass',
+                        'keywords'
+                    ])
+                    ->with(['comments' => function ($q) use ($database) {
+                        $q->latest()
+                          ->limit(10)
+                          ->select(['id', 'commentable_id', 'commentable_type', 'user_id', 'body', 'database', 'created_at', 'updated_at'])
+                          ->with(['user' => function ($userQuery) {
+                              $userQuery->select(['id', 'name', 'avatar', 'profile_photo_path']);
+                          }]);
+                    }])
+                    ->findOrFail($id);
+            });
 
-        // محتوى مع روابط الكلمات المفتاحية
-        $contentWithKeywords = $this->replaceKeywordsWithLinks($article->content, $article->keywords);
-        $internalLinked      = $this->createInternalLinks($article->content, $article->keywords);
+            $article->increment('visit_count');
 
-        return (new ArticleResource($article))
-            ->additional([
-                'country' => $countryParam,
+            // Author is stored on the primary connection ('jo')
+            $author = null;
+            if ($article->author_id) {
+                 try {
+                    $authorQuery = User::on('jo')->select(['id', 'name']);
+                    // Check if twitter_handle exists if needed, or just select standard fields
+                    $author = $authorQuery->find($article->author_id);
+                 } catch (\Throwable $e) {
+                    // Fallback or ignore
+                 }
+            }
+
+            // Keyword link replacements (cached)
+            $cacheKey = sprintf('article_rendered_%s_%d_%d', $database, $article->id, $article->updated_at?->getTimestamp() ?? 0);
+            $contentWithKeywords = Cache::remember($cacheKey, now()->addHours(6), function () use ($article, $database) {
+                 return $this->replaceKeywordsWithLinks($article->content, $article->keywords, $database);
+            });
+            
+            // We can also compute internal links if needed separately, but replaceKeywordsWithLinks usually covers it.
+            // The original controller had both, but they seem redundant or doing similar things. 
+            // We will stick to the main one.
+
+            // Get Related Articles (Same subject, same grade, excluding current)
+            $relatedArticles = Article::on($database)
+                ->where('subject_id', $article->subject_id)
+                ->where('grade_level', $article->grade_level)
+                ->where('id', '!=', $id)
+                ->where('status', true)
+                ->latest()
+                ->take(6)
+                ->get(['id', 'title', 'created_at', 'visit_count']);
+
+            // Prepare response data manually or via resource to inject extra fields
+            $resource = new ArticleResource($article);
+            
+            return $resource->additional([
+                'country' => $database,
+                'author_details' => $author, // Pass the manually fetched author
                 'content_with_keywords' => $contentWithKeywords,
-                'content_internal' => $internalLinked,
+                'comments' => $article->comments, // Include comments
+                'related_articles' => $relatedArticles
             ]);
+        } catch (\Throwable $e) {
+            Log::error('Error in ArticleApiController@show: ' . $e->getMessage());
+            Log::error($e->getTraceAsString());
+            return response()->json(['error' => $e->getMessage(), 'trace' => $e->getTraceAsString()], 500);
+        }
+    }
+
+    /**
+     * استبدال الكلمات المفتاحية بروابط
+     */
+    private function replaceKeywordsWithLinks($content, $keywords, $database = 'jo')
+    {
+        foreach ($keywords as $keyword) {
+            $keywordText = trim((string) $keyword->keyword);
+
+            if ($keywordText === '') {
+                continue;
+            }
+
+            // Construct frontend URL: /{countryCode}/articles/keyword/{keyword}
+            // Note: We are assuming the frontend structure here.
+            $frontendUrl = "/{$database}/articles/keyword/" . urlencode($keywordText);
+
+            $content = preg_replace(
+                '/\b' . preg_quote($keywordText, '/') . '\b/u',
+                '<a href="' . $frontendUrl . '" class="text-primary hover:underline font-medium">' . $keywordText . '</a>',
+                $content
+            );
+        }
+
+        return $content;
     }
 
     /**
@@ -503,6 +610,33 @@ class ArticleApiController extends Controller
     }
 
     /**
+     * Download attached file and increment download count
+     */
+    public function download(Request $request, $id)
+    {
+        try {
+            $countryParam = $request->input('database', $request->input('country_id', $request->input('country', '1')));
+            $database     = $this->getConnection($countryParam);
+
+            $file = File::on($database)->findOrFail($id);
+            
+            $file->increment('download_count');
+
+            $filePath = storage_path('app/public/' . $file->file_path);
+            
+            if (file_exists($filePath)) {
+                return response()->download($filePath, $file->file_name);
+            }
+
+            Log::error("File not found at path: {$filePath} for ID: {$id} on DB: {$database}");
+            return response()->json(['message' => 'File not found on server'], 404);
+        } catch (\Throwable $e) {
+            Log::error('Error in ArticleApiController@download: ' . $e->getMessage());
+            return response()->json(['error' => 'Internal Server Error', 'message' => $e->getMessage()], 500);
+        }
+    }
+
+    /**
      * DELETE /api/articles/{id}
      * حذف المقال والملفات والصورة
      */
@@ -654,50 +788,10 @@ class ArticleApiController extends Controller
 
     /**
      * استبدال الكلمات المفتاحية بروابط
+     * (Deprecated: Use the one defined near show() or keep this one and remove the other.
+     * Actually, I should remove this one as I defined a better one above.)
      */
-    private function replaceKeywordsWithLinks($content, $keywords)
-    {
-        foreach ($keywords as $keyword) {
-            $database    = session('database', 'jo');
-            $keywordText = $keyword->keyword;
-            $keywordLink = route('keywords.indexByKeyword', [
-                'database' => $database,
-                'keywords' => $keywordText,
-            ]);
 
-            $content = preg_replace(
-                '/\b' . preg_quote($keywordText, '/') . '\b/u',
-                '<a href="' . $keywordLink . '">' . $keywordText . '</a>',
-                $content
-            );
-        }
-
-        return $content;
-    }
-
-    /**
-     * إنشاء روابط داخلية داخل المحتوى للكلمات المفتاحية
-     */
-    private function createInternalLinks($content, $keywords)
-    {
-        $keywordsArray = $keywords->pluck('keyword')->toArray();
-
-        foreach ($keywordsArray as $keyword) {
-            $database = session('database', 'jo');
-            $keyword  = trim($keyword);
-            if ($keyword === '') {
-                continue;
-            }
-            $url = route('keywords.indexByKeyword', [
-                'database' => $database,
-                'keywords' => $keyword,
-            ]);
-
-            $content = str_replace($keyword, '<a href="' . $url . '">' . $keyword . '</a>', $content);
-        }
-
-        return $content;
-    }
 
     /**
      * تخزين مرفق بشكل آمن

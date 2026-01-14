@@ -91,18 +91,26 @@ class SecurityScanMiddleware
 
         // فحص الطلب بحثًا عن أنماط هجمات محتملة
         if ($this->detectSqlInjection($request) || $this->detectXssAttack($request)) {
-            // حظر تلقائي للـ IP عند اكتشاف محاولة هجوم
+            // حظر تلقائي للـ IP عند اكتشاف محاولة هجوم (من ثاني محاولة)
             try {
                 $ip = $request->ip();
                 if ($ip && !BannedIp::isBanned($ip)) {
-                    $eventType = $this->detectSqlInjection($request) ? 'sql_injection_attempt' : 'xss_attempt';
-                    $reason = sprintf('Auto-ban: %s detected on route %s | UA: %s',
-                        $eventType,
-                        $request->route() ? ($request->route()->getName() ?? $request->path()) : $request->path(),
-                        (string) $request->userAgent()
-                    );
-                    // اجعل الحظر دائمًا (يمكن تغييره لاحقًا إلى مدة معينة)
-                    BannedIp::ban($ip, $reason, null, null);
+                    // التحقق من وجود محاولات سابقة
+                    $previousAttacks = SecurityLog::where('ip_address', $ip)
+                        ->whereIn('event_type', ['sql_injection_attempt', 'xss_attempt', 'suspicious_activity'])
+                        ->where('created_at', '>=', now()->subHours(24))
+                        ->count();
+
+                    if ($previousAttacks >= 1) {
+                        $eventType = $this->detectSqlInjection($request) ? 'sql_injection_attempt' : 'xss_attempt';
+                        $reason = sprintf('Auto-ban: Multiple attacks detected (%s). Last attempt on route %s | UA: %s',
+                            $eventType,
+                            $request->route() ? ($request->route()->getName() ?? $request->path()) : $request->path(),
+                            (string) $request->userAgent()
+                        );
+                        // اجعل الحظر دائمًا
+                        BannedIp::ban($ip, $reason, null, null);
+                    }
                 }
             } catch (\Throwable $e) {
                 // لا تعطل الاستجابة في حال فشل الحظر، فقط سجّل المشكلة

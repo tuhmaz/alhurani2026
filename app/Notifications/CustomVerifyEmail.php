@@ -41,7 +41,7 @@ class CustomVerifyEmail extends VerifyEmail implements ShouldQueue
                 return call_user_func(static::$createUrlCallback, $notifiable);
             }
 
-            $url = URL::temporarySignedRoute(
+            $backendUrl = URL::temporarySignedRoute(
                 'verification.verify',
                 now()->addMinutes(Config::get('auth.verification.expire', 60)),
                 [
@@ -50,13 +50,21 @@ class CustomVerifyEmail extends VerifyEmail implements ShouldQueue
                 ]
             );
 
+            $frontendBase = rtrim(config('app.frontend_url', config('app.url')), '/');
+            $frontendUrl = $frontendBase . '/verify-email/' . $notifiable->getKey() . '/' . sha1($notifiable->getEmailForVerification());
+
+            $query = parse_url($backendUrl, PHP_URL_QUERY);
+            if (!empty($query)) {
+                $frontendUrl .= '?' . $query;
+            }
+
             Log::info('Generated verification URL', [
                 'user_id' => $notifiable->getKey(),
-                'url_hash' => substr(sha1($url), 0, 8),
+                'url_hash' => substr(sha1($frontendUrl), 0, 8),
                 'expires' => now()->addMinutes(Config::get('auth.verification.expire', 60))
             ]);
 
-            return $url;
+            return $frontendUrl;
         } catch (\Exception $e) {
             Log::error('Error generating verification URL', [
                 'user_id' => $notifiable->id ?? 'unknown',

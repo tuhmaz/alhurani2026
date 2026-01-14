@@ -29,6 +29,8 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->api([
             ApiRateLimiter::class,
             SecurityHeaders::class,
+            VisitorTrackingMiddleware::class,
+            UpdateUserLastActivity::class,
         ]);
         // Web middlewares
         $middleware->web([

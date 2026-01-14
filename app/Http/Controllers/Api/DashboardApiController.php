@@ -203,7 +203,7 @@ class DashboardApiController extends Controller
                         'name' => $article->author->name ?? '',
                         'avatar' => $article->author->profile_photo_path
                     ],
-                    'url' => route('frontend.articles.show', ['database'=>$database,'article'=>$article->id])
+                    'url' => env('FRONTEND_URL', 'https://alemancenter.com') . '/' . $database . '/articles/' . $article->id
                 ]);
             });
 
@@ -221,7 +221,7 @@ class DashboardApiController extends Controller
                         'name' => $item->author->name ?? '',
                         'avatar' => $item->author->profile_photo_path
                     ],
-                    'url' => route('content.frontend.posts.show', ['database'=>$database,'id'=>$item->id])
+                    'url' => env('FRONTEND_URL', 'https://alemancenter.com') . '/' . $database . '/posts/' . $item->id
                 ]);
             });
 
@@ -234,10 +234,10 @@ class DashboardApiController extends Controller
 
                 $url = null;
                 if ($comment->commentable_type === Article::class) {
-                    $url = route('frontend.articles.show', ['database'=>$database,'article'=>$comment->commentable_id]);
+                    $url = env('FRONTEND_URL', 'https://alemancenter.com') . '/' . $database . '/articles/' . $comment->commentable_id;
                 }
                 elseif ($comment->commentable_type === News::class) {
-                    $url = route('content.frontend.posts.show', ['database'=>$database,'id'=>$comment->commentable_id]);
+                    $url = env('FRONTEND_URL', 'https://alemancenter.com') . '/' . $database . '/posts/' . $comment->commentable_id;
                 }
 
                 $activities->push([

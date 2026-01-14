@@ -26,7 +26,8 @@ class MessageApiController extends Controller
         $conversationIds = Conversation::where('user1_id', $userId)
             ->orWhere('user2_id', $userId)->pluck('id');
 
-        $messages = Message::whereIn('conversation_id', $conversationIds)
+        $messages = Message::with(['sender', 'conversation.user1', 'conversation.user2'])
+            ->whereIn('conversation_id', $conversationIds)
             ->where('is_chat', false)
             ->where('sender_id', '!=', $userId)
             ->latest()
@@ -41,7 +42,8 @@ class MessageApiController extends Controller
      */
     public function sent()
     {
-        $messages = Message::where('sender_id', Auth::id())
+        $messages = Message::with(['conversation.user1', 'conversation.user2'])
+            ->where('sender_id', Auth::id())
             ->where('is_chat', false)
             ->latest()
             ->paginate(20);

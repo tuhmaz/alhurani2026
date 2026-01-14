@@ -13,6 +13,8 @@ use App\Models\Post;
 use App\Models\File;
 use App\Models\Category;
 use App\Models\Keyword;
+use App\Models\User;
+use App\Notifications\PostNotification;
 use App\Services\SecureFileUploadService;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use App\Http\Resources\Api\PostResource;
@@ -54,6 +56,8 @@ class PostApiController extends Controller
             ->when($request->input('search'), fn($q, $search) =>
                 $q->where('title', 'like', "%$search%")
                   ->orWhere('content', 'like', "%$search%"))
+            ->when($request->input('category_id'), fn($q, $id) =>
+                $q->where('category_id', $id))
             ->orderBy('id', 'desc')
             ->paginate($request->get('per_page', 10));
 
@@ -73,10 +77,28 @@ class PostApiController extends Controller
         $db = $this->connection($country);
 
         $post = Post::on($db)
-            ->with(['attachments', 'category'])
+            ->with(['attachments', 'category', 'author'])
             ->findOrFail($id);
 
         return new PostResource($post);
+    }
+
+    /** ------------------------------
+     *  POST /api/posts/{id}/increment-view
+     * ------------------------------ */
+    public function incrementView(Request $request, $id)
+    {
+        $country = $request->country ?? '1';
+        $db = $this->connection($country);
+
+        $post = Post::on($db)->findOrFail($id);
+        $post->increment('views');
+
+        return response()->json([
+            'success' => true,
+            'message' => 'View count incremented',
+            'views' => $post->views
+        ]);
     }
 
     /** ------------------------------
@@ -157,6 +179,20 @@ class PostApiController extends Controller
                         'mime_type' => $file->getMimeType(),
                     ]);
                 }
+            }
+
+            /** --- Send Notifications --- */
+            try {
+                // Notify all users about the new post
+                // We use chunk to handle large number of users efficiently
+                User::select('id')->chunk(100, function ($users) use ($post) {
+                    foreach ($users as $user) {
+                        $user->notify(new PostNotification($post));
+                    }
+                });
+            } catch (\Exception $e) {
+                Log::error("Failed to send post notifications: " . $e->getMessage());
+                // Don't fail the request just because notifications failed
             }
 
             DB::connection($db)->commit();

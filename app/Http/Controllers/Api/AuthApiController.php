@@ -17,6 +17,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\RateLimiter;
 use Laravel\Socialite\Facades\Socialite;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Resources\BaseResource;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Http\Requests\Auth\LoginRequest;
@@ -79,7 +80,9 @@ class AuthApiController extends Controller
             ]);
         }
 
+        /** @var \App\Models\User $user */
         $user = Auth::user();
+        $user->load(['roles', 'permissions']);
 
         $token = $this->issueToken($user);
 
@@ -113,10 +116,81 @@ class AuthApiController extends Controller
      */
     public function me(Request $request)
     {
+        /** @var \App\Models\User $user */
+        $user = $request->user();
+        $user->load(['roles', 'permissions']);
+
         return new BaseResource([
             'status' => true,
-            'user'   => new UserResource($request->user())
+            'user'   => new UserResource($user)
         ]);
+    }
+
+    /**
+     * ============================
+     *  UPDATE PROFILE
+     * ============================
+     */
+    public function updateProfile(Request $request)
+    {
+        /** @var \App\Models\User $user */
+        $user = $request->user();
+
+        $validated = $request->validate([
+            'name' => 'sometimes|string|max:255',
+            'email' => 'sometimes|email|unique:users,email,' . $user->id,
+            'phone' => 'nullable|string|max:20',
+            'bio' => 'nullable|string|max:1000',
+            'job_title' => 'nullable|string|max:255',
+            'gender' => 'nullable|in:male,female',
+            'country' => 'nullable|string|max:255',
+            'password' => 'nullable|confirmed|min:8',
+            'profile_photo' => 'nullable|image|max:2048',
+            'social_links' => 'nullable|array',
+            'social_links.facebook' => 'nullable|string|max:255',
+            'social_links.twitter' => 'nullable|string|max:255',
+            'social_links.linkedin' => 'nullable|string|max:255',
+            'social_links.instagram' => 'nullable|string|max:255',
+            'social_links.github' => 'nullable|string|max:255',
+        ], [
+            'profile_photo.max' => 'حجم الصورة يجب أن لا يتجاوز 2 ميجابايت',
+            'profile_photo.image' => 'الملف يجب أن يكون صورة',
+            'password.confirmed' => 'كلمة المرور غير متطابقة',
+            'password.min' => 'كلمة المرور يجب أن تكون 8 أحرف على الأقل',
+            'email.unique' => 'البريد الإلكتروني مستخدم بالفعل',
+            'email.email' => 'البريد الإلكتروني غير صالح',
+        ]);
+
+        // Update basic fields
+        $user->fill($validated);
+
+        // Handle password update
+        if (!empty($validated['password'])) {
+            $user->password = Hash::make($validated['password']);
+        }
+
+        // Handle profile photo upload
+        if ($request->hasFile('profile_photo')) {
+            // Delete old photo
+            if ($user->profile_photo_path) {
+                Storage::disk('public')->delete($user->profile_photo_path);
+            }
+
+            $path = $request->file('profile_photo')->store('profiles', 'public');
+            $user->profile_photo_path = $path;
+        }
+
+        // Handle social links
+        if (isset($validated['social_links'])) {
+            $user->social_links = $validated['social_links'];
+        }
+
+        $user->save();
+
+        return (new UserResource($user->load('roles', 'permissions')))
+            ->additional([
+                'message' => 'تم تحديث الملف الشخصي بنجاح',
+            ]);
     }
 
     /**

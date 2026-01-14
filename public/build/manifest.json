@@ -623,7 +623,7 @@
     "isEntry": true
   },
   "resources/assets/js/forms-editors.js": {
-    "file": "assets/forms-editors-Ds8ZH5kO.js",
+    "file": "assets/forms-editors-D45vvBcZ.js",
     "name": "forms-editors",
     "src": "resources/assets/js/forms-editors.js",
     "isEntry": true,
@@ -945,7 +945,7 @@
     "isEntry": true
   },
   "resources/assets/js/pages/security/trusted-ips.js": {
-    "file": "assets/trusted-ips-BxBSwcQL.js",
+    "file": "assets/trusted-ips-gSwHfrse.js",
     "name": "trusted-ips",
     "src": "resources/assets/js/pages/security/trusted-ips.js",
     "isEntry": true
@@ -3251,7 +3251,7 @@
     "src": "resources/assets/vendor/fonts/fontawesome/fa-v4compatibility.woff2"
   },
   "resources/assets/vendor/fonts/iconify/iconify.css": {
-    "file": "assets/iconify-B9icn7-O.css",
+    "file": "assets/iconify-DzhHiEBf.css",
     "src": "resources/assets/vendor/fonts/iconify/iconify.css",
     "isEntry": true
   },

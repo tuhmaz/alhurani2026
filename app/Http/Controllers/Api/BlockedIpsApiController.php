@@ -11,16 +11,60 @@ class BlockedIpsApiController extends Controller
 {
     /**
      * GET /api/security/blocked-ips
-     * جلب قائمة الـ IP المحظورة
+     * جلب قائمة الـ IP المحظورة مع دعم البحث والفلترة
      */
     public function index(Request $request)
     {
-        $blockedIps = BannedIp::with('blockedBy')
-            ->latest('created_at')
-            ->paginate(15);
+        $query = BannedIp::with('blockedBy');
+
+        // البحث
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('ip', 'like', "%{$search}%")
+                  ->orWhere('reason', 'like', "%{$search}%");
+            });
+        }
+
+        // الفلترة حسب الحالة
+        if ($request->filled('status')) {
+            if ($request->status === 'active') {
+                $query->active();
+            } elseif ($request->status === 'expired') {
+                $query->expired();
+            }
+        }
+
+        $blockedIps = $query->latest('created_at')
+            ->paginate($request->per_page ?? 15);
 
         return new BaseResource([
             'data' => $blockedIps
+        ]);
+    }
+
+    /**
+     * POST /api/security/blocked-ips
+     * حظر عنوان IP يدوياً
+     */
+    public function store(Request $request)
+    {
+        $request->validate([
+            'ip' => 'required|ip|unique:banned_ips,ip',
+            'reason' => 'nullable|string|max:255',
+            'days' => 'nullable|integer|min:0' // 0 = مؤبد (أو حسب المنطق)
+        ]);
+
+        $ip = BannedIp::ban(
+            $request->ip,
+            $request->reason ?? 'Manual Block',
+            $request->days ?? null, // null = دائم إذا لم يحدد أيام
+            auth()->id()
+        );
+
+        return new BaseResource([
+            'message' => 'تم حظر العنوان بنجاح',
+            'data' => $ip
         ]);
     }
 

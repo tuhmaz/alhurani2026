@@ -89,13 +89,6 @@
       "permissions": "manage articles",
       "submenu": [
         {
-          "name": "الصفوف الدراسية",
-          "icon": "menu-icon icon-base ti tabler-school",
-          "slug": "school-classes.index",
-          "url": "/dashboard/school-classes",
-          "permissions": "manage school classes"
-        },
-        {
           "name": "المواد الدراسية",
           "icon": "menu-icon icon-base ti tabler-book",
           "slug": "subjects.index",

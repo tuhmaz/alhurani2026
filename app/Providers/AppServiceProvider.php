@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Log;
 use App\Models\Setting;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Auth\Notifications\ResetPassword;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -41,6 +42,12 @@ class AppServiceProvider extends ServiceProvider
             // تعيين ملفات الكوكيز الخاصة بالمصادقة لتكون آمنة
             Config::set('sanctum.middleware.encrypt_cookies', true);
         }
+
+        ResetPassword::createUrlUsing(function ($notifiable, string $token) {
+            $frontendBase = rtrim(config('app.frontend_url', config('app.url')), '/');
+            $email = $notifiable->getEmailForPasswordReset();
+            return $frontendBase . '/reset-password/' . $token . '?email=' . urlencode($email);
+        });
 
         // Configure VarDumper
         VarDumper::setHandler(function ($var) {

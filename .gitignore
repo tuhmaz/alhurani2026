@@ -1,34 +1,82 @@
-# Laravel & PHP
-/.env
-/.env.*
-/vendor/
-/node_modules/
-/bootstrap/cache/*.php
-/storage/*.key
-/storage/app/public/*
-/storage/framework/*
-/storage/logs/*
-/storage/geoip/*
+# Laravel .gitignore
+
+# Environment files
+.env
+.env.backup
+.env.production
+.env.*.php
+.env.php
+.env.local
+.env.staging
+
+# Laravel specific
+/node_modules
+/public/build
+/public/hot
 /public/storage
+/storage/*.key
+/vendor
+.phpunit.result.cache
+Homestead.json
+Homestead.yaml
+auth.json
+npm-debug.log
+yarn-error.log
 
-# Project-specific secrets
-/app/secrets/
-
-# IDE/editor
-/.idea/
-/.vscode/
-/.fleet/
-
-# System files
+# IDE
+/.idea
+/.vscode
+*.swp
+*.swo
+*~
 .DS_Store
 Thumbs.db
 
-# Logs & reports
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
+# Build files
+/bootstrap/cache/*
+!/bootstrap/cache/.gitkeep
 
-# Tests cache
-/.phpunit.result.cache
+# Storage
+/storage/framework/cache/*
+!/storage/framework/cache/.gitignore
+/storage/framework/sessions/*
+!/storage/framework/sessions/.gitignore
+/storage/framework/testing/*
+!/storage/framework/testing/.gitignore
+/storage/framework/views/*
+!/storage/framework/views/.gitignore
+/storage/logs/*
+!/storage/logs/.gitignore
 
+# Public storage
+/public/uploads/*
+/public/images/*
+/public/files/*
+
+# Database
+*.sqlite
+*.sqlite-journal
+
+# Sensitive files
+*.key
+*.pem
+*.p12
+*.pfx
+secrets.json
+credentials.json
+
+# PHP
+composer.phar
+composer.lock.json
+
+# Testing
+.phpunit.result.cache
+/tests/_output/*
+
+# Deployment
+deploy.sh
+.deployment
+
+# Misc
+error_log
+.htaccess.bak

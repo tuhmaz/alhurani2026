@@ -20,21 +20,28 @@ class UserResource extends JsonResource
             'email_verified_at'  => $this->email_verified_at,
             'last_activity' => $this->last_activity,
             'last_seen'     => $this->last_seen,
-            'status'        => $this->isOnline() ? 'online' : 'offline',
+            'status'        => $this->status,
+            'is_online'     => $this->isOnline(),
             'job_title' => $this->job_title,
             'gender'    => $this->gender,
             'country'   => $this->country,
             'social_links' => $this->social_links,
             'roles'    => $this->whenLoaded('roles', function() {
                 return $this->roles->map(function($role) {
-                    return ['name' => $role->name];
+                    return [
+                        'id' => $role->id,
+                        'name' => $role->name,
+                        'guard_name' => $role->guard_name
+                    ];
                 });
             }, []),
-            'permissions' => $this->whenLoaded('permissions', function() {
-                return $this->permissions->map(function($permission) {
-                    return ['name' => $permission->name];
-                });
-            }, []),
+            'permissions' => $this->getAllPermissions()->map(function($permission) {
+                return [
+                    'id' => $permission->id,
+                    'name' => $permission->name,
+                    'guard_name' => $permission->guard_name
+                ];
+            }),
             'created_at' => $this->created_at,
         ];
     }

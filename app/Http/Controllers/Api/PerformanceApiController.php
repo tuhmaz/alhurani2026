@@ -73,7 +73,7 @@ class PerformanceApiController extends Controller
                 ];
             });
 
-            return new BaseResource(['data' => $data]);
+            return new BaseResource($data);
         } catch (\Throwable $e) {
             Log::error("Performance live error: {$e->getMessage()}");
             return (new BaseResource(['message' => 'Unable to fetch metrics']))

@@ -28,10 +28,194 @@ class AnalyticsApiController extends Controller
     public function index()
     {
         return new BaseResource([
-            'visitor_stats'  => $this->getVisitorStats(),
-            'user_stats'     => $this->getUserStats(),
-            'country_stats'  => $this->getCountryStats(),
+            'visitor_stats'   => $this->getVisitorStats(),
+            'user_stats'      => $this->getUserStats(),
+            'country_stats'   => $this->getCountryStats(),
+            'chart_data'      => $this->getChartData(),
+            'device_stats'    => $this->getDeviceStats(),
+            'traffic_sources' => $this->getTrafficSources(),
         ]);
+    }
+
+    /**
+     * إحصائيات الرسم البياني (زوار ومشاهدات) لآخر 30 يوم
+     */
+    protected function getChartData()
+    {
+        $days = 30;
+        $endDate = now();
+        $startDate = now()->subDays($days);
+
+        // Visitors (Sessions)
+        $visitors = DB::table('visitors_tracking')
+            ->select(DB::raw('DATE(created_at) as date'), DB::raw('count(*) as count'))
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->groupBy('date')
+            ->orderBy('date')
+            ->get()
+            ->pluck('count', 'date');
+
+        // Page Views
+        $pageViews = DB::table('page_visits')
+            ->select(DB::raw('DATE(created_at) as date'), DB::raw('count(*) as count'))
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->groupBy('date')
+            ->orderBy('date')
+            ->get()
+            ->pluck('count', 'date');
+
+        $data = [];
+        $period = \Carbon\CarbonPeriod::create($startDate, $endDate);
+
+        // Arabic Month Names
+        $months = [
+            1 => 'يناير', 2 => 'فبراير', 3 => 'مارس', 4 => 'أبريل', 
+            5 => 'مايو', 6 => 'يونيو', 7 => 'يوليو', 8 => 'أغسطس', 
+            9 => 'سبتمبر', 10 => 'أكتوبر', 11 => 'نوفمبر', 12 => 'ديسمبر'
+        ];
+
+        foreach ($period as $date) {
+            $formattedDate = $date->format('Y-m-d');
+            $day = $date->format('d');
+            $month = $months[$date->format('n')];
+            $displayDate = "$day $month";
+
+            $data[] = [
+                'name' => $displayDate,
+                'full_date' => $formattedDate,
+                'visitors' => $visitors[$formattedDate] ?? 0,
+                'pageViews' => $pageViews[$formattedDate] ?? 0,
+            ];
+        }
+
+        return $data;
+    }
+
+    /**
+     * إحصائيات الأجهزة
+     */
+    protected function getDeviceStats()
+    {
+        // Group by OS as a proxy for device type
+        $stats = DB::table('visitors_tracking')
+            ->select('os', DB::raw('count(*) as count'))
+            ->whereNotNull('os')
+            ->where('created_at', '>=', now()->subDays(30))
+            ->groupBy('os')
+            ->orderByDesc('count')
+            ->get();
+
+        $devices = [
+            'Desktop' => 0,
+            'Mobile' => 0,
+            'Tablet' => 0,
+            'Other' => 0,
+        ];
+
+        foreach ($stats as $stat) {
+            $os = strtolower($stat->os);
+            if (str_contains($os, 'windows') || str_contains($os, 'mac') || str_contains($os, 'linux') || str_contains($os, 'ubuntu')) {
+                 $devices['Desktop'] += $stat->count;
+            } elseif (str_contains($os, 'android') || str_contains($os, 'iphone')) {
+                 $devices['Mobile'] += $stat->count;
+            } elseif (str_contains($os, 'ipad') || str_contains($os, 'tablet')) {
+                 $devices['Tablet'] += $stat->count;
+            } else {
+                 $devices['Other'] += $stat->count;
+            }
+        }
+        
+        $total = array_sum($devices);
+        $result = [];
+        $colors = ['#3b82f6', '#8b5cf6', '#22c55e', '#64748b']; // Blue, Purple, Green, Slate
+        $i = 0;
+
+        foreach ($devices as $name => $value) {
+            if ($total > 0 && $value > 0) {
+                $result[] = [
+                    'name' => match($name) {
+                        'Desktop' => 'الكمبيوتر',
+                        'Mobile' => 'الهاتف',
+                        'Tablet' => 'التابلت',
+                        'Other' => 'أخرى',
+                    },
+                    'value' => round(($value / $total) * 100, 1),
+                    'count' => $value,
+                    'color' => $colors[$i++] ?? '#000000',
+                ];
+            }
+        }
+        
+        // If empty, return dummy data for visual testing if needed, or empty array
+        return empty($result) ? [] : $result;
+    }
+
+    /**
+     * مصادر الزيارات
+     */
+    protected function getTrafficSources()
+    {
+        $stats = DB::table('visitors_tracking')
+            ->select('referer', DB::raw('count(*) as count'))
+            ->where('created_at', '>=', now()->subDays(30))
+            ->groupBy('referer')
+            ->orderByDesc('count')
+            ->get();
+
+        $sources = [
+            'Direct' => 0,
+            'Social' => 0,
+            'Search' => 0,
+            'Other' => 0,
+        ];
+
+        foreach ($stats as $stat) {
+            $referer = $stat->referer;
+            
+            if (empty($referer)) {
+                $sources['Direct'] += $stat->count;
+                continue;
+            }
+
+            $host = parse_url($referer, PHP_URL_HOST);
+            if (!$host) $host = $referer; // Fallback
+            $host = strtolower($host);
+
+            if (str_contains($host, 'google') || str_contains($host, 'bing') || str_contains($host, 'yahoo')) {
+                $sources['Search'] += $stat->count;
+            } elseif (str_contains($host, 'facebook') || str_contains($host, 'twitter') || str_contains($host, 'instagram') || str_contains($host, 'linkedin') || str_contains($host, 't.co') || str_contains($host, 'youtube')) {
+                $sources['Social'] += $stat->count;
+            } else {
+                $sources['Other'] += $stat->count;
+            }
+        }
+        
+        $result = [];
+        $sourceNames = [
+            'Direct' => 'مباشر',
+            'Social' => 'تواصل اجتماعي',
+            'Search' => 'محركات بحث',
+            'Other' => 'أخرى',
+        ];
+
+        foreach ($sources as $key => $val) {
+            if ($val > 0) {
+                $result[] = [
+                    'source' => $sourceNames[$key],
+                    'visits' => $val,
+                    'change' => 0, // Could calculate change compared to previous period
+                ];
+            }
+        }
+
+        // Always return something if empty
+        if (empty($result)) {
+            $result = [
+                ['source' => 'مباشر', 'visits' => 0, 'change' => 0],
+            ];
+        }
+
+        return $result;
     }
 
     /**
@@ -92,17 +276,38 @@ class AnalyticsApiController extends Controller
             $page = $v->url ?? '/';
             $pageDisplay = $this->formatPageUrl($page);
 
+            // Fetch recent history for this IP
+            $history = DB::table('visitors_tracking')
+                ->where('ip_address', $v->ip_address)
+                ->orderBy('created_at', 'desc')
+                ->limit(10)
+                ->get()
+                ->map(function($h) {
+                    return [
+                        'url' => $h->url ?? '/',
+                        'time' => $h->created_at,
+                        'device' => ($h->os ?? 'Unknown') . ' - ' . ($h->browser ?? 'Unknown'),
+                        'location' => ($h->country ?? 'Local') . ', ' . ($h->city ?? 'Local'),
+                    ];
+                });
+
             $active[] = [
                 'ip'                => $v->ip_address,
                 'country'           => $v->country ?? 'غير محدد',
                 'city'              => $v->city ?? 'غير محدد',
                 'browser'           => $v->browser ?? 'غير محدد',
                 'os'                => $v->os ?? 'غير محدد',
+                'user_agent'        => $v->user_agent ?? '',
                 'current_page'      => $pageDisplay,
                 'current_page_full' => $page,
                 'is_member'         => $user ? true : false,
+                'user_id'           => $user?->id,
                 'user_name'         => $user?->name,
+                'user_email'        => $user?->email,
+                'user_role'         => $user?->role ?? 'User',
                 'last_active'       => Carbon::parse($v->last_activity),
+                'session_start'     => Carbon::parse($v->created_at ?? $v->last_activity),
+                'history'           => $history,
             ];
         }
 

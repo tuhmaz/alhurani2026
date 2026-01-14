@@ -13,6 +13,9 @@ class SchoolClassResource extends JsonResource
             'grade_name'  => $this->grade_name,
             'grade_level' => $this->grade_level,
             'country_id'  => $this->country_id,
+            'subjects_count' => $this->subjects_count,
+            'subjects'    => SubjectResource::collection($this->whenLoaded('subjects')),
+            'semesters'   => SemesterResource::collection($this->whenLoaded('semesters')),
         ];
     }
 }

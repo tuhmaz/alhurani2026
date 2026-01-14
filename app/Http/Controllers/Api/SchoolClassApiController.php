@@ -40,6 +40,7 @@ class SchoolClassApiController extends Controller
         $connection = $this->connection($countryId);
 
         $classes = SchoolClass::on($connection)
+            ->withCount('subjects')
             ->orderBy('grade_level')
             ->orderBy('grade_name')
             ->get();
@@ -61,7 +62,9 @@ class SchoolClassApiController extends Controller
         $connection = $this->connection($countryId);
 
         $schoolClass = SchoolClass::on($connection)
-            ->with(['subjects', 'semesters'])
+            ->with(['subjects' => function ($query) {
+                $query->withCount(['articles', 'files']);
+            }, 'semesters'])
             ->findOrFail($id);
 
         return new SchoolClassResource($schoolClass);

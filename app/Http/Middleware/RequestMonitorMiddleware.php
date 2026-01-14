@@ -61,8 +61,8 @@ class RequestMonitorMiddleware
         // تحقق من وجود علامات مشبوهة في الطلب
         $suspiciousScore = $this->calculateSuspiciousScore($request);
         
-        // تسجيل الطلبات المشبوهة أو الطلبات إلى المسارات الحساسة
-        if ($suspiciousScore >= 50 || $isSensitivePath) {
+        // تسجيل الطلبات المشبوهة فقط (تجاهل الطلبات العادية حتى للمسارات الحساسة)
+        if ($suspiciousScore >= 20) {
             $eventType = $suspiciousScore >= 70 ? 'suspicious_activity' : 'access_monitoring';
             $severity = $suspiciousScore >= 70 ? SecurityLog::SEVERITY_LEVELS['WARNING'] : SecurityLog::SEVERITY_LEVELS['INFO'];
             

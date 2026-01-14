@@ -17,6 +17,54 @@ use App\Http\Resources\BaseResource;
 class CommentApiController extends Controller
 {
     /**
+     * LIST COMMENTS (API)
+     */
+    public function index(Request $request, $database)
+    {
+        try {
+            $query = Comment::on($database)
+                ->withoutGlobalScope('database_scope')
+                ->where('database', $database)
+                ->select([
+                    'id',
+                    'body',
+                    'user_id',
+                    'commentable_id',
+                    'commentable_type',
+                    'database',
+                    'created_at',
+                    'updated_at',
+                ])
+                ->with([
+                    'user:id,name,profile_photo_path',
+                    'commentable:id,title',
+                ]);
+
+            if ($request->has('q')) {
+                $query->where('body', 'like', '%' . $request->q . '%');
+            }
+
+            if ($request->has('commentable_id')) {
+                $query->where('commentable_id', $request->commentable_id);
+            }
+
+            if ($request->has('commentable_type')) {
+                $query->where('commentable_type', $request->commentable_type);
+            }
+
+            $comments = $query->latest()->paginate($request->per_page ?? 20);
+
+            return new BaseResource($comments);
+
+        } catch (Throwable $e) {
+            Log::error('Comment List Error: ' . $e->getMessage());
+            return (new BaseResource(['message' => 'Failed to fetch comments']))
+                ->response($request)
+                ->setStatusCode(500);
+        }
+    }
+
+    /**
      * CREATE COMMENT (API)
      */
     public function store(Request $request, $database)
@@ -121,7 +169,7 @@ class CommentApiController extends Controller
             $user = Auth::user();
             $canDelete = $user &&
                 ($user->id === $comment->user_id ||
-                 $user->loadMissing('roles')->roles->contains('name', 'Admin'));
+                 $user->roles->contains('name', 'Admin'));
 
             if (!$canDelete) {
                 return (new BaseResource(['message' => 'Unauthorized to delete this comment']))

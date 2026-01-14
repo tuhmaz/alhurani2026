@@ -40,7 +40,7 @@ function trustIp(event) {
     const form = event.target;
     const formData = new FormData(form);
 
-    fetch('/security/ip/trust', {
+    fetch('/dashboard/security/trust-ip', {
         method: 'POST',
         headers: {
             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
@@ -95,13 +95,14 @@ function untrustIp(ipAddress) {
         buttonsStyling: false
     }).then((result) => {
         if (result.isConfirmed) {
-            fetch(`/security/ip/${ipAddress}/untrust`, {
+            fetch('/dashboard/security/untrust-ip', {
                 method: 'POST',
                 headers: {
                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'
-                }
+                },
+                body: JSON.stringify({ ip_address: ipAddress })
             })
             .then(response => response.json())
             .then(data => {
@@ -140,7 +141,7 @@ function untrustIp(ipAddress) {
 
 // View IP Details function
 function viewIpDetails(ipAddress) {
-    fetch(`/security/ip/${ipAddress}/details`)
+    fetch(`/dashboard/security/ip-details/${encodeURIComponent(ipAddress)}`)
         .then(response => response.text())
         .then(html => {
             document.getElementById('ipDetailsContent').innerHTML = html;

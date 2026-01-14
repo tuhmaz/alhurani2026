@@ -18,6 +18,7 @@ use App\Http\Requests\User\UserStoreRequest;
 use App\Http\Requests\User\UserUpdateRequest;
 use App\Http\Requests\User\UserUpdateRolesPermissionsRequest;
 use App\Http\Requests\User\UserBulkDeleteRequest;
+use App\Http\Requests\User\UserBulkUpdateStatusRequest;
 
 class UserApiController extends Controller
 {
@@ -26,25 +27,27 @@ class UserApiController extends Controller
      */
     public function index(Request $request)
     {
+        /** @var \App\Models\User|null $auth */
         $auth = Auth::user();
         $auth?->loadMissing('roles', 'permissions');
 
         // استعلام محسّن مع Eager Loading لتجنب N+1 problem
         $query = User::query()
-            ->select(['id', 'name', 'email', 'created_at', 'profile_photo_path'])
             ->with(['roles:id,name', 'permissions:id,name']);
 
         $hasAdminRole = $auth && ($auth->hasAnyRole([
             'Admin','admin','Administrator','Super Admin','مدير','مشرف'
         ]));
-        $canManageUsers = $auth && (
+        
+        // Check if user has permission to see ALL users
+        // Users with 'manage users' only can access the page but see only themselves
+        // Users with 'admin users' or Admin role can see everyone
+        $canViewAllUsers = $auth && (
             $hasAdminRole ||
-            $auth->can('manage users') ||
-            $auth->can('view users') ||
-            $auth->can('عرض المستخدمين')
+            $auth->can('admin users')
         );
 
-        if (!$canManageUsers) {
+        if (!$canViewAllUsers) {
             $query->where('id', $auth?->id);
         }
 
@@ -74,6 +77,26 @@ class UserApiController extends Controller
     }
 
     /**
+     * Search users for messaging/autocomplete (minimal data, no strict permissions)
+     */
+    public function search(Request $request)
+    {
+        $search = $request->get('search');
+        if (!$search) {
+            return response()->json(['data' => []]);
+        }
+
+        $users = User::query()
+            ->where('name', 'like', "%{$search}%")
+            ->orWhere('email', 'like', "%{$search}%")
+            ->orderBy('name')
+            ->limit(20)
+            ->get();
+
+        return UserResource::collection($users);
+    }
+
+    /**
      * إنشاء مستخدم جديد
      */
     public function store(UserStoreRequest $request)
@@ -82,13 +105,18 @@ class UserApiController extends Controller
 
         DB::beginTransaction();
         try {
-            $user = User::create([
-                'name'     => $validated['name'],
-                'email'    => $validated['email'],
-                'password' => Hash::make($validated['password'])
-            ]);
+            $validated['password'] = Hash::make($validated['password']);
+            
+            // Handle profile photo if present
+            if ($request->hasFile('profile_photo')) {
+                $validated['profile_photo_path'] = $request->file('profile_photo')->store('profiles', 'public');
+            }
 
-            $user->assignRole($validated['role']);
+            $user = User::create($validated);
+
+            if (isset($validated['role'])) {
+                $user->assignRole($validated['role']);
+            }
 
             DB::commit();
 
@@ -111,6 +139,7 @@ class UserApiController extends Controller
      */
     public function show(User $user)
     {
+        /** @var \App\Models\User|null $auth */
         $auth = Auth::user();
         $auth?->loadMissing('roles', 'permissions');
 
@@ -138,6 +167,7 @@ class UserApiController extends Controller
      */
     public function update(UserUpdateRequest $request, User $user)
     {
+        /** @var \App\Models\User|null $auth */
         $auth = Auth::user();
         $auth?->loadMissing('roles');
 
@@ -148,6 +178,12 @@ class UserApiController extends Controller
         }
 
         $validated = $request->validated();
+
+        if (!empty($validated['password'])) {
+            $validated['password'] = Hash::make($validated['password']);
+        } else {
+            unset($validated['password']);
+        }
 
         $user->fill($validated);
 
@@ -264,6 +300,21 @@ class UserApiController extends Controller
         return new BaseResource([
             'deleted' => $deleted,
             'errors' => $errors
+        ]);
+    }
+
+    /**
+     * تحديث حالة مجموعة مستخدمين Bulk Update Status
+     */
+    public function bulkUpdateStatus(UserBulkUpdateStatusRequest $request)
+    {
+        $validated = $request->validated();
+        
+        $count = User::whereIn('id', $validated['ids'])->update(['status' => $validated['status']]);
+
+        return new BaseResource([
+            'message' => 'Users status updated successfully',
+            'updated' => $count
         ]);
     }
 }

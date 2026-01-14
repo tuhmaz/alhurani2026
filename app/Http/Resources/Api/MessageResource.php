@@ -8,7 +8,7 @@ class MessageResource extends JsonResource
 {
     public function toArray($request)
     {
-        return [
+        $data = [
             'id'             => $this->id,
             'conversation_id'=> $this->conversation_id,
             'sender_id'      => $this->sender_id,
@@ -21,6 +21,16 @@ class MessageResource extends JsonResource
             'sender'         => new UserResource($this->whenLoaded('sender')),
             'created_at'     => $this->created_at,
         ];
+
+        if ($this->relationLoaded('conversation') && $this->conversation) {
+            $conv = $this->conversation;
+            $recipient = ($conv->user1_id == $this->sender_id) ? $conv->user2 : $conv->user1;
+            if ($recipient) {
+                $data['recipient'] = new UserResource($recipient);
+            }
+        }
+
+        return $data;
     }
 }
 

@@ -12,7 +12,8 @@ class SubjectResource extends JsonResource
             'id'         => $this->id,
             'subject_name' => $this->subject_name,
             'grade_level'=> $this->grade_level,
-            'articles_count' => $this->articles_count ?? null,
+            'articles_count' => $this->articles_count,
+            'files_count' => $this->files_count,
         ];
     }
 }

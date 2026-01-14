@@ -59,8 +59,10 @@ class VisitorSession extends Model
         $isDesktop = !$isMobile && !$isTablet;
         $isBot = self::isBotUa($ua);
 
+        $sessionId = $request->hasSession() ? $request->session()->getId() : 'ns_' . md5($request->ip() . $request->userAgent());
+
         return self::updateOrCreate(
-            ['session_id' => $request->session()->getId()],
+            ['session_id' => $sessionId],
             [
                 'ip' => $request->ip(),
                 'country' => $location['country'] ?? null,

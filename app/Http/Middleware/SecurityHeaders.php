@@ -30,6 +30,10 @@ class SecurityHeaders
      */
     public function handle(Request $request, Closure $next)
     {
+        // Generate CSP nonce for this request
+        $nonce = base64_encode(random_bytes(16));
+        $request->attributes->set('csp_nonce', $nonce);
+
         $response = $next($request);
 
         // التحقق مما إذا كان الطلب لصفحة المراقبة
@@ -51,7 +55,7 @@ class SecurityHeaders
         }
 
         // تكوين سياسة CSP المحسنة (لا تضف الهيدر إذا كانت السلسلة فارغة)
-        $cspHeader = $this->getEnhancedCSP($isMonitoringPage);
+        $cspHeader = $this->getEnhancedCSP($isMonitoringPage, $nonce);
         if (!empty($cspHeader)) {
             $response->headers->set('Content-Security-Policy', $cspHeader);
         }
@@ -105,7 +109,7 @@ class SecurityHeaders
     /**
      * الحصول على سياسة CSP المحسنة
      */
-    protected function getEnhancedCSP(bool $isMonitoringPage = false): string
+    protected function getEnhancedCSP(bool $isMonitoringPage = false, string $nonce = ''): string
     {
         // التحقق من تفعيل CSP
         if (!Config::get('csp.enabled', true)) {
@@ -119,7 +123,14 @@ class SecurityHeaders
         if (empty($csp)) {
             return '';
         }
-        
+
+        // Add nonce to script-src if not monitoring page (monitoring may need inline scripts)
+        if (!$isMonitoringPage && $nonce && isset($csp['script-src'])) {
+            // Add nonce but keep unsafe-inline for AdSense compatibility
+            // Note: Browsers that support nonces will ignore unsafe-inline
+            $csp['script-src'][] = "'nonce-{$nonce}'";
+        }
+
         // تطبيق إعدادات خاصة لصفحات المراقبة
         if ($isMonitoringPage) {
             $monitoringOverrides = Config::get('csp.monitoring_overrides', []);
@@ -127,7 +138,7 @@ class SecurityHeaders
                 $csp[$directive] = array_merge($csp[$directive] ?? [], $values);
             }
         }
-    
+
         return $this->buildCSPString($csp);
     }
     

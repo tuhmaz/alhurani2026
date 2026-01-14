@@ -148,6 +148,16 @@ class SecurityLogApiController extends Controller
         ]);
     }
 
+    public function blockedIps(Request $request)
+    {
+        $logs = SecurityLog::where('event_type', 'blocked_access')
+            ->where('is_resolved', false)
+            ->latest()
+            ->paginate($request->per_page ?? 20);
+
+        return SecurityLogResource::collection($logs);
+    }
+
     /**
      * Mark log as resolved
      */
@@ -177,23 +187,8 @@ class SecurityLogApiController extends Controller
     {
         try {
             $log = SecurityLog::findOrFail($id);
-            $backup = $log->replicate();
             $log->delete();
-            $ipAddress = $backup->ip_address;
-            if (!$ipAddress || !filter_var($ipAddress, FILTER_VALIDATE_IP)) {
-                $ipAddress = request()->ip();
-            }
-            if (!$ipAddress || !filter_var($ipAddress, FILTER_VALIDATE_IP)) {
-                $ipAddress = '0.0.0.0';
-            }
-            SecurityLog::create([
-                'ip_address' => $ipAddress,
-                'event_type' => 'log_deleted',
-                'description' => "Deleted log: {$backup->event_type}",
-                'user_id' => Auth::id(),
-                'severity' => 'info',
-                'is_resolved' => true
-            ]);
+
             return new BaseResource(['message' => 'Log deleted']);
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             return (new BaseResource(['message' => 'Log not found']))

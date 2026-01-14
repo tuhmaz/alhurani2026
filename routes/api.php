@@ -75,11 +75,40 @@ Route::prefix('auth')->group(function () {
 
     Route::middleware('auth:sanctum')->group(function () {
         Route::get('/user', [AuthApiController::class, 'me']);
+        Route::put('/profile', [AuthApiController::class, 'updateProfile']);
         Route::post('/logout', [AuthApiController::class, 'logout']);
         Route::post('/email/resend', [AuthApiController::class, 'resendVerifyEmail']);
     });
 });
 
+
+// Public School Classes Routes
+Route::get('/school-classes', [SchoolClassApiController::class, 'index']);
+Route::get('/school-classes/{id}', [SchoolClassApiController::class, 'show']);
+
+// Public Filter Routes
+Route::prefix('filter')->group(function () {
+    Route::get('/', [FilterApiController::class, 'index']);
+    Route::get('/subjects/{classId}', [FilterApiController::class, 'getSubjectsByClass']);
+    Route::get('/semesters/{subjectId}', [FilterApiController::class, 'getSemestersBySubject']);
+    Route::get('/file-types/{semesterId}', [FilterApiController::class, 'getFileTypesBySemester']);
+});
+
+// Public Article Routes
+Route::get('/articles/{id}', [ArticleApiController::class, 'show']);
+Route::get('/articles/file/{id}/download', [ArticleApiController::class, 'download']);
+
+// Public Category Routes
+Route::get('/categories', [CategoryApiController::class, 'index']);
+Route::get('/categories/{id}', [CategoryApiController::class, 'show']);
+
+// Public Post Routes
+Route::get('/posts', [PostApiController::class, 'index']);
+Route::get('/posts/{id}', [PostApiController::class, 'show']);
+Route::post('/posts/{id}/increment-view', [PostApiController::class, 'incrementView']);
+
+// Public Comments Routes
+Route::get('/comments/{database}', [CommentApiController::class, 'index']);
 
 Route::middleware('auth:sanctum')->prefix('dashboard')->group(function () {
     Route::get('/activities', [ActivityApiController::class, 'index']);
@@ -87,26 +116,26 @@ Route::middleware('auth:sanctum')->prefix('dashboard')->group(function () {
     Route::delete('/activities/clean', [ActivityApiController::class, 'cleanOldActivities']);
 
     // Analytics
-    Route::get('/analytics', [AnalyticsApiController::class, 'index']);
-    Route::get('/analytics/visitors', [AnalyticsApiController::class, 'visitors']);
+    Route::middleware(['can:manage monitoring'])->group(function () {
+    Route::get('/visitor-analytics', [AnalyticsApiController::class, 'index']);
+    });
 
     // Articles
+    Route::middleware(['can:manage articles'])->group(function () {
     Route::get('/articles',                 [ArticleApiController::class, 'index']);
+    Route::get('/articles/{id}',            [ArticleApiController::class, 'show'])->whereNumber('id');
     Route::get('/articles/create',          [ArticleApiController::class, 'create']);
     Route::post('/articles',                [ArticleApiController::class, 'store']);
-    Route::get('/articles/{id}',            [ArticleApiController::class, 'show'])->whereNumber('id');
     Route::get('/articles/{id}/edit',       [ArticleApiController::class, 'edit'])->whereNumber('id');
     Route::put('/articles/{id}',            [ArticleApiController::class, 'update'])->whereNumber('id');
     Route::delete('/articles/{id}',         [ArticleApiController::class, 'destroy'])->whereNumber('id');
 
-    Route::get('/articles/by-class/{grade_level}',   [ArticleApiController::class, 'indexByClass']);
-    Route::get('/articles/by-keyword/{keyword}',     [ArticleApiController::class, 'indexByKeyword']);
-
     Route::post('/articles/{id}/publish',   [ArticleApiController::class, 'publish'])->whereNumber('id');
     Route::post('/articles/{id}/unpublish', [ArticleApiController::class, 'unpublish'])->whereNumber('id');
+    });
 
     // School Classes
-    Route::middleware(['auth:sanctum'])->group(function () {
+    // Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::get('/school-classes', [SchoolClassApiController::class, 'index']);
     Route::get('/school-classes/{id}', [SchoolClassApiController::class, 'show']);
@@ -146,9 +175,24 @@ Route::middleware('auth:sanctum')->prefix('dashboard')->group(function () {
         Route::delete('/delete/{type}/{database}', [SitemapApiController::class, 'delete']);
     });
 
+    // Roles & Permissions
+    Route::prefix('roles')->middleware('can:manage roles')->group(function () {
+        Route::get('/', [RoleApiController::class, 'index']);
+        Route::post('/', [RoleApiController::class, 'store']);
+        Route::get('/{id}', [RoleApiController::class, 'show']);
+        Route::put('/{id}', [RoleApiController::class, 'update']);
+        Route::delete('/{id}', [RoleApiController::class, 'destroy']);
+    });
+    Route::get('/permissions', [RoleApiController::class, 'permissions']);
+    Route::post('/permissions', [PermissionApiController::class, 'store'])->middleware('can:manage roles');
+    Route::put('/permissions/{id}', [PermissionApiController::class, 'update'])->middleware('can:manage roles');
+    Route::delete('/permissions/{id}', [PermissionApiController::class, 'destroy'])->middleware('can:manage roles');
+
+    // User Search (Public for authenticated users)
+    Route::get('/users/search', [UserApiController::class, 'search']);
+
     // Users
-    Route::middleware('auth:sanctum')->group(function () {
-        Route::prefix('users')->group(function () {
+    Route::prefix('users')->middleware('can:manage users')->group(function () {
 
         Route::get('/', [UserApiController::class, 'index']);
         Route::post('/', [UserApiController::class, 'store']);
@@ -161,11 +205,12 @@ Route::middleware('auth:sanctum')->prefix('dashboard')->group(function () {
         Route::delete('/{user}', [UserApiController::class, 'destroy']);
 
         Route::post('/bulk-delete', [UserApiController::class, 'bulkDelete']);
+        Route::post('/update-status', [UserApiController::class, 'bulkUpdateStatus']);
         });
 
 
         // Blocked IPs
-        Route::prefix('security')->group(function () {
+        Route::prefix('security')->middleware('can:manage security')->group(function () {
         Route::get('/blocked-ips', [BlockedIpsApiController::class, 'index']);
         Route::delete('/blocked-ips/{id}', [BlockedIpsApiController::class, 'destroy']);
         Route::delete('/blocked-ips/bulk', [BlockedIpsApiController::class, 'bulkDestroy']);
@@ -173,9 +218,10 @@ Route::middleware('auth:sanctum')->prefix('dashboard')->group(function () {
 
     // Settings
 
-    Route::middleware(['auth:sanctum'])->prefix('settings')->group(function () {
+    Route::middleware(['auth:sanctum', 'can:manage settings'])->prefix('settings')->group(function () {
 
     Route::get('/', [SettingsApiController::class, 'getAll']);
+    Route::post('/', [SettingsApiController::class, 'update']);
     Route::post('/update', [SettingsApiController::class, 'update']);
 
     // SMTP
@@ -264,7 +310,7 @@ Route::middleware('auth:sanctum')->prefix('dashboard')->group(function () {
         Route::get('/overview', [SecurityLogApiController::class, 'overview']);
          });
 
-        Route::prefix('security/monitor')->group(function () {
+        Route::prefix('security/monitor')->middleware('can:manage security')->group(function () {
 
         // ---------------------------------------------------------
         // Dashboard (Statistics, Alerts summary, Charts)
@@ -368,6 +414,38 @@ Route::middleware('auth:sanctum')->prefix('dashboard')->group(function () {
             Route::get('/cache', [PerformanceApiController::class, 'cacheStats']);
         });
 
+
+
+    // Security
+    Route::prefix('security')->group(function () {
+            // Monitor Dashboard
+            Route::get('/monitor/dashboard', [SecurityMonitorApiController::class, 'dashboard']);
+            
+            // Logs
+            Route::get('/logs', [SecurityLogApiController::class, 'logs']);
+            Route::delete('/logs', [SecurityLogApiController::class, 'destroyAll']);
+            Route::delete('/logs/{id}', [SecurityLogApiController::class, 'destroy']);
+            Route::post('/logs/{id}/resolve', [SecurityLogApiController::class, 'resolve']);
+
+            // Blocked IPs
+            Route::get('/blocked-ips', [BlockedIpsApiController::class, 'index']);
+            Route::post('/blocked-ips', [BlockedIpsApiController::class, 'store']);
+            Route::delete('/blocked-ips/{id}', [BlockedIpsApiController::class, 'destroy']);
+            
+            // IP Management
+            Route::prefix('ip')->group(function () {
+                // Keep these if they offer specific functionality like unblock by IP string vs ID
+                Route::post('/block', [SecurityLogApiController::class, 'blockIp']); 
+                Route::post('/unblock', [SecurityLogApiController::class, 'unblockIp']);
+                Route::post('/trust', [SecurityLogApiController::class, 'trustIp']);
+                Route::post('/untrust', [SecurityLogApiController::class, 'untrustIp']);
+                Route::get('/{ip}', [SecurityLogApiController::class, 'ipDetails']);
+            });
+            
+            // Analytics
+            Route::get('/analytics', [SecurityLogApiController::class, 'analytics']);
+        });
+
         // Categories
         Route::prefix('categories')->group(function () {
         Route::get('/', [CategoryApiController::class, 'index']);
@@ -379,6 +457,7 @@ Route::middleware('auth:sanctum')->prefix('dashboard')->group(function () {
         });
         // Create comment
         Route::prefix('comments')->group(function () {
+        Route::get('/{database}', [CommentApiController::class, 'index']);
         Route::post('/{database}', [CommentApiController::class, 'store']);
 
         // Delete comment
@@ -387,8 +466,8 @@ Route::middleware('auth:sanctum')->prefix('dashboard')->group(function () {
 
 
     // Dashboard
-    Route::get('/dashboard', [DashboardApiController::class, 'index']);
-    Route::get('/dashboard/analytics', [DashboardApiController::class, 'analytics']);
+    Route::get('/', [DashboardApiController::class, 'index']);
+    Route::get('/content-analytics', [DashboardApiController::class, 'analytics']);
 
     // Files
     Route::prefix('files')->group(function () {
@@ -415,8 +494,6 @@ Route::middleware('auth:sanctum')->prefix('dashboard')->group(function () {
 
     // Posts
     Route::prefix('posts')->group(function () {
-    Route::get('/', [PostApiController::class, 'index']);
-    Route::get('/{id}', [PostApiController::class, 'show']);
     Route::post('/', [PostApiController::class, 'store']);
     Route::post('/{id}', [PostApiController::class, 'update']);
     Route::delete('/{id}', [PostApiController::class, 'destroy']);
@@ -452,6 +529,8 @@ Route::prefix('')->group(function () {
     Route::get('/articles/{id}',            [ArticleApiController::class, 'show'])->whereNumber('id');
     Route::get('/articles/by-class/{grade_level}',   [ArticleApiController::class, 'indexByClass']);
     Route::get('/articles/by-keyword/{keyword}',     [ArticleApiController::class, 'indexByKeyword']);
+Route::get('/keywords', [KeywordApiController::class, 'index']);
+Route::get('/keywords/{keyword}', [KeywordApiController::class, 'show']);
 });
 
     // Grade One
@@ -516,7 +595,4 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/reactions', [ReactionApiController::class, 'store']);
     Route::delete('/reactions/{comment_id}', [ReactionApiController::class, 'destroy']);
     Route::get('/reactions/{comment_id}', [ReactionApiController::class, 'show']);
-});
-
-});
 });

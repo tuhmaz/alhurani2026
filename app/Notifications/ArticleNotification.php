@@ -48,10 +48,16 @@ class ArticleNotification extends Notification
     public function toArray($notifiable)
     {
         $country = session('country', 'jordan');
+        // Using relative path for frontend
+        $url = '/dashboard/articles/' . $this->article->id; // Assuming simple ID route for now
+        
         return [
-            'title' => 'New Article: ' . $this->article->title,
+            'title' => 'مقال جديد: ' . $this->article->title,
+            'message' => 'تم نشر مقال جديد في ' . $this->article->schoolClass->name ?? 'المدرسة',
             'article_id' => $this->article->id,
-            'url' => route('dashboard.articles.show', ['article' => $this->article->id, 'country' => $country]),
+            'type' => 'Article',
+            'url' => $url,
+            'action_url' => $url,
         ];
     }
 }

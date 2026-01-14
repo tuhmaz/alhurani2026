@@ -10,6 +10,7 @@ use App\Models\Post;
 use App\Models\Category;
 use App\Models\SitemapExclusion;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 use Spatie\Sitemap\Sitemap;
 use Spatie\Sitemap\SitemapIndex;
 use Spatie\Sitemap\Tags\Url;
@@ -66,18 +67,29 @@ class SitemapApiController extends Controller
      */
     public function generateAll(Request $request)
     {
-        $db = $request->input('database', 'jo');
-        $connection = $this->getConnection($db);
+        try {
+            $db = $request->input('database', 'jo');
+            Log::info("Starting sitemap generation for database: {$db}");
+            Log::info("Storage public root: " . config('filesystems.disks.public.root'));
+            
+            $connection = $this->getConnection($db);
 
-        $this->generateArticles($connection, $db);
-        $this->generatePosts($connection, $db);
-        $this->generateStatic($connection, $db);
-        $this->generateIndex($db);
+            $this->generateArticles($connection, $db);
+            $this->generatePosts($connection, $db);
+            $this->generateStatic($connection, $db);
+            $this->generateIndex($db);
 
-        return new BaseResource([
-            'database' => $db,
-            'message' => 'All sitemaps have been generated'
-        ]);
+            Log::info("Sitemap generation completed for database: {$db}");
+
+            return new BaseResource([
+                'database' => $db,
+                'message' => 'All sitemaps have been generated'
+            ]);
+        } catch (\Exception $e) {
+            Log::error("Sitemap generation failed: " . $e->getMessage());
+            Log::error($e->getTraceAsString());
+            throw $e;
+        }
     }
 
     /**
@@ -103,23 +115,31 @@ class SitemapApiController extends Controller
      */
     private function generateArticles(string $connection, string $db)
     {
+        Log::info("Generating articles sitemap for {$db} using connection {$connection}");
         $sitemap = Sitemap::create();
+        $count = 0;
 
-        Article::on($connection)->get()->each(function ($article) use ($sitemap, $db) {
-            $url = Url::create(route('frontend.articles.show', ['database' => $db, 'article' => $article->id]))
+        Article::on($connection)->get()->each(function ($article) use ($sitemap, $db, &$count) {
+            $frontendUrl = env('FRONTEND_URL', 'https://alemancenter.com') . '/' . $db . '/articles/' . $article->id;
+            $url = Url::create($frontendUrl)
                 ->setLastModificationDate($article->updated_at)
                 ->setChangeFrequency(Url::CHANGE_FREQUENCY_WEEKLY)
                 ->setPriority(0.80);
 
             // الصورة
-            $image = $article->image_url ?: asset('assets/img/front-pages/icons/articles_default_image.webp');
+            $image = $article->image_url ?: env('APP_URL', 'https://api.alemancenter.com') . '/assets/img/front-pages/icons/articles_default_image.webp';
             $url->addImage($image, $article->alt ?? $article->title);
 
             $sitemap->add($url);
+            $count++;
         });
+
+        Log::info("Found {$count} articles. Writing to sitemaps/sitemap_articles_{$db}.xml");
 
         Storage::disk('public')
             ->put("sitemaps/sitemap_articles_{$db}.xml", $sitemap->render());
+            
+        Log::info("File written: sitemaps/sitemap_articles_{$db}.xml");
     }
 
     /**
@@ -130,14 +150,15 @@ class SitemapApiController extends Controller
         $sitemap = Sitemap::create();
 
         Post::on($connection)->get()->each(function ($post) use ($sitemap, $db) {
-            $url = Url::create(route('content.frontend.posts.show', ['database' => $db, 'id' => $post->id]))
+            $frontendUrl = env('FRONTEND_URL', 'https://alemancenter.com') . '/' . $db . '/posts/' . $post->id;
+            $url = Url::create($frontendUrl)
                 ->setLastModificationDate($post->updated_at)
                 ->setChangeFrequency(Url::CHANGE_FREQUENCY_DAILY)
                 ->setPriority(0.70);
 
             $image = $post->image
-                ? Storage::url($post->image)
-                : asset('assets/img/front-pages/icons/articles_default_image.webp');
+                ? env('APP_URL', 'https://api.alemancenter.com') . Storage::url($post->image)
+                : env('APP_URL', 'https://api.alemancenter.com') . '/assets/img/front-pages/icons/articles_default_image.webp';
 
             $url->addImage($image, $post->alt ?? $post->title);
 
@@ -156,16 +177,18 @@ class SitemapApiController extends Controller
         $sitemap = Sitemap::create();
 
         // Home
+        $frontendUrl = env('FRONTEND_URL', 'https://alemancenter.com');
         $sitemap->add(
-            Url::create(route('home'))
+            Url::create($frontendUrl)
                 ->setPriority(1.0)
                 ->setChangeFrequency(Url::CHANGE_FREQUENCY_DAILY)
         );
 
         // الصفوف
         SchoolClass::on($connection)->get()->each(function ($class) use ($sitemap, $db) {
+            $frontendUrl = env('FRONTEND_URL', 'https://alemancenter.com') . '/' . $db . '/classes/' . $class->id;
             $sitemap->add(
-                Url::create(route('frontend.lesson.show', ['database' => $db, 'id' => $class->id]))
+                Url::create($frontendUrl)
                     ->setLastModificationDate($class->updated_at)
                     ->setChangeFrequency(Url::CHANGE_FREQUENCY_MONTHLY)
                     ->setPriority(0.60)
@@ -174,8 +197,9 @@ class SitemapApiController extends Controller
 
         // التصنيفات
         Category::on($connection)->get()->each(function ($category) use ($sitemap, $db) {
+            $frontendUrl = env('FRONTEND_URL', 'https://alemancenter.com') . '/' . $db . '/categories/' . $category->slug;
             $sitemap->add(
-                Url::create(route('content.frontend.categories.show', ['database' => $db, 'category' => $category->slug]))
+                Url::create($frontendUrl)
                     ->setLastModificationDate($category->updated_at)
                     ->setChangeFrequency(Url::CHANGE_FREQUENCY_MONTHLY)
                     ->setPriority(0.50)

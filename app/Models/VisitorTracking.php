@@ -19,6 +19,7 @@ class VisitorTracking extends Model
         'browser',
         'os',
         'url',
+        'referer',
         'latitude',
         'longitude',
         'user_id',

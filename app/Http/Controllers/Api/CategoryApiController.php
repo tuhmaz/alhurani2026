@@ -49,6 +49,7 @@ class CategoryApiController extends Controller
             $connection = $this->getConnection($country);
 
             $categories = Category::on($connection)
+                ->with('parent')
                 ->withCount('news')
                 ->orderBy('created_at', 'desc')
                 ->get();
@@ -80,7 +81,9 @@ class CategoryApiController extends Controller
                 'name' => 'required|string|max:255',
                 'is_active' => 'sometimes|boolean',
                 'parent_id' => 'nullable|integer',
-                'icon_image' => 'nullable|image|max:2048'
+                'icon' => 'nullable|string',
+                'icon_image' => 'nullable|image|max:2048',
+                'image' => 'nullable|image|max:4096'
             ]);
 
             $connection = $this->getConnection($validated['country']);
@@ -93,6 +96,7 @@ class CategoryApiController extends Controller
             $category->slug = Str::slug($validated['name']);
             $category->is_active = $request->boolean('is_active', true);
             $category->country = $validated['country'];
+            $category->icon = $request->input('icon');
 
             // Parent category
             if (!empty($validated['parent_id'])) {
@@ -103,10 +107,16 @@ class CategoryApiController extends Controller
                 $category->parent_id = $validated['parent_id'];
             }
 
-            // Icon upload
+            // Icon Image upload
             if ($request->hasFile('icon_image')) {
                 $path = $request->file('icon_image')->store('category_icons', 'public');
-                $category->icon = $path;
+                $category->icon_image = $path;
+            }
+
+            // Main Image upload
+            if ($request->hasFile('image')) {
+                $path = $request->file('image')->store('category_images', 'public');
+                $category->image = $path;
             }
 
             $category->save();
@@ -141,7 +151,7 @@ class CategoryApiController extends Controller
             $country = $request->input('country', '1');
             $connection = $this->getConnection($country);
 
-            $category = Category::on($connection)->findOrFail($id);
+            $category = Category::on($connection)->with('parent')->findOrFail($id);
 
             return new CategoryResource($category);
 
@@ -165,7 +175,9 @@ class CategoryApiController extends Controller
                 'name' => 'required|string|max:255',
                 'is_active' => 'sometimes|boolean',
                 'parent_id' => 'nullable|integer',
-                'icon_image' => 'nullable|image|max:2048'
+                'icon' => 'nullable|string',
+                'icon_image' => 'nullable|image|max:2048',
+                'image' => 'nullable|image|max:4096'
             ]);
 
             $connection = $this->getConnection($validated['country']);
@@ -177,6 +189,9 @@ class CategoryApiController extends Controller
             $category->slug = Str::slug($validated['name']);
             $category->is_active = $request->boolean('is_active', true);
             $category->country = $validated['country'];
+            if ($request->has('icon')) {
+                $category->icon = $request->input('icon');
+            }
 
             // Parent
             if (!empty($validated['parent_id'])) {
@@ -192,13 +207,22 @@ class CategoryApiController extends Controller
                 $category->parent_id = null;
             }
 
-            // Icon update
+            // Icon Image update
             if ($request->hasFile('icon_image')) {
-                if (!empty($category->icon)) {
-                    Storage::disk('public')->delete($category->icon);
+                if (!empty($category->icon_image)) {
+                    Storage::disk('public')->delete($category->icon_image);
                 }
                 $path = $request->file('icon_image')->store('category_icons', 'public');
-                $category->icon = $path;
+                $category->icon_image = $path;
+            }
+
+            // Main Image update
+            if ($request->hasFile('image')) {
+                if (!empty($category->image)) {
+                    Storage::disk('public')->delete($category->image);
+                }
+                $path = $request->file('image')->store('category_images', 'public');
+                $category->image = $path;
             }
 
             $category->save();

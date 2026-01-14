@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Cache;
 use Carbon\Carbon;
 use App\Http\Resources\Api\SecurityLogResource;
 use App\Http\Resources\BaseResource;
@@ -32,17 +33,21 @@ class SecurityMonitorApiController extends Controller
     // -----------------------------------------------------------
     public function dashboard()
     {
-        return new BaseResource([
-            'alerts_summary' => $this->securityAlertService->getSecurityAlertsSummary(),
-            'stats' => $this->securityLogService->getQuickStats(),
-            'recent_events' => SecurityLogResource::collection(
-                SecurityLog::with('user')->latest()->limit(10)->get()
-            ),
-            'event_type_distribution' => $this->getEventTypeDistribution(),
-            'severity_distribution' => $this->getSeverityDistribution(),
-            'timeline_trends' => $this->getTimelineTrends(),
-            'top_routes' => $this->getTopAttackedRoutes(),
-        ]);
+        $data = Cache::remember('security_monitor_dashboard', 30, function () {
+            return [
+                'alerts_summary' => $this->securityAlertService->getSecurityAlertsSummary(),
+                'stats' => $this->securityLogService->getQuickStats(),
+                'recent_events' => SecurityLogResource::collection(
+                    SecurityLog::with('user')->latest()->limit(10)->get()
+                )->resolve(),
+                'event_type_distribution' => $this->getEventTypeDistribution(),
+                'severity_distribution' => $this->getSeverityDistribution(),
+                'timeline_trends' => $this->getTimelineTrends(),
+                'top_routes' => $this->getTopAttackedRoutes(),
+            ];
+        });
+
+        return new BaseResource($data);
     }
 
     // -----------------------------------------------------------
